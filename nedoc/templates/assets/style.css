@@ -1,0 +1,187 @@
+body {
+  color: #1D2731;
+  font-family:FreeSans,Arimo,"Droid Sans",Helvetica,Arial,sans-serif;
+}
+
+ul.deflst {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul.deflst li:nth-child(odd) {
+  border: 1px solid #ddd;
+  margin-top: -1px;
+  background-color: #f6f6f6;
+  padding: 12px;
+}
+
+ul.deflst li:nth-child(even) {
+  border: 1px solid #ddd;
+  margin-top: -1px;
+  padding: 12px;
+}
+
+a:link.symbol {
+  color: rgb(61, 79, 93);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:visited.symbol {
+  color: rgb(77, 100, 117);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.tree ul {
+  list-style-type: none;
+  margin-left: 1em;
+  padding: 0em;
+}
+
+.tree li {
+  padding: 0.2em;
+}
+
+.tree a:link {
+  color: white;
+  text-decoration: none;
+}
+
+.tree a:visited {
+  color: white;
+  text-decoration: none;
+}
+
+.select a:visited {
+  color: rgb(61, 79, 93);
+}
+
+.select a:link {
+  color: rgb(61, 79, 93);
+}
+
+.select {
+  background: white;
+  color: rgb(61, 79, 93);
+  border-radius: 5px;
+  padding: 0.3em 0.3em 0.3em 0.3em;
+}
+
+.selectimp a:visited {
+  color: rgb(61, 79, 93);
+}
+
+.selectimp a:link {
+  color: rgb(61, 79, 93);
+}
+
+.selectimp {
+  background: #999;
+  color: rgb(61, 79, 93);
+  border-radius: 5px;
+  padding: 0.3em 0.3em 0.3em 0.3em;
+}
+
+
+a {
+  color: inherit;
+}
+
+.decl {
+  /*background-color: rgb(61, 79, 93);*/
+  background-color: #ddd;
+  padding: 0.5em 1em 0.5em 1em;
+  /*color: white;*/
+  border-radius: 5px;
+}
+
+a:link.sourcelink {
+  color: black;
+}
+
+a:visited.sourcelink {
+  color: black;
+}
+
+.decl .kw {
+  font-weight: bold;
+}
+
+.decl .idnt {
+  padding-left: 2em;
+}
+
+/*.args {
+  font-style: italic;
+}*/
+
+.label {
+  background-color: rgb(77, 100, 117);
+  color: white;
+  border-radius: 2px;
+  padding: 0.3em 0.5em 0.3em 0.5em;
+  /*font-variant: small-caps;*/
+  font-family:FreeSans,Arimo,"Droid Sans",Helvetica,Arial,sans-serif;
+}
+
+.def {
+  font-family: monospace;
+  font-size: 16px;
+}
+
+.docline {
+  padding-top: 0.2em;
+}
+
+.header {
+  text-align: center;
+  top: auto;
+  margin: 3em auto;
+}
+
+.sidebar {
+  background: rgb(61, 79, 93);
+  color: #fff;
+}
+
+.content {
+  padding: 2em 1em 0;
+}
+
+.tree {
+  margin: 2em auto;
+}
+
+.import {
+  font-size: small;
+}
+
+.footer {
+  font-size: small;
+  color: gray;
+}
+
+.footer a {
+  color: gray;
+}
+
+@media (min-width: 48em) {
+  .content {
+    padding: 2em 3em 0;
+    margin-left: 25%;
+  }
+
+  .header {
+    margin: 2em 2em 0;
+    text-align: right;
+  }
+
+  .sidebar {
+    overflow-y: scroll;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+  }
+}
