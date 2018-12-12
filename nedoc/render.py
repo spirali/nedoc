@@ -78,7 +78,10 @@ class Renderer:
             new_result.sort(
                 key=lambda t: (t[1].unit.sort_order, t[1].imported, t[1].name))
             if prev is not None:
-                idx = u.childs.index(prev)
+                idx = 0
+                for idx, (level, uc) in enumerate(new_result):
+                    if uc.unit == prev:
+                        break
                 new_result[idx+1:idx+1] = [(level + 1, uc)
                                            for (level, uc) in out]
             out = new_result

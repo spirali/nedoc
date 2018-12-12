@@ -29,7 +29,7 @@ ${symbol_link(base)}${"" if loop.last else ", "}\
 % for child in unit.functions(public=True):
     <li><div class="def">def <a class="symbol" href="${ctx.link_to(child)}">${child.name}</a>(<span class="args">${child.render_args()}</span>)
         % if child.overrides:
-        <span class="label">override<span>
+        <span class="label">override</span>
         % endif
         </div>
         % if child.docline:
