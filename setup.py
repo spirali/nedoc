@@ -11,7 +11,7 @@ See https://github.com/spirali/nedoc for more details."""
 assets = glob.glob("nedoc/templates/assets/**/*", recursive=True)
 
 setup(name='nedoc',
-      version="0.1",
+      version="0.2",
       description='Generator for API documentation',
       long_description=long_desc,
       url='https://github.com/spirali/nedoc',
