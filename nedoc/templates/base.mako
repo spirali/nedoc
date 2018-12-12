@@ -8,9 +8,9 @@
 <link rel="stylesheet" href="./assets/purecss/grids-responsive-min.css">
 <link rel="stylesheet" href="./assets/style.css">
 <link rel="stylesheet" href="./assets/pygments/default.css">
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="./assets/jquery/jquery-ui.min.css">
+<script src="./assets/jquery/jquery-3.0.0.min.js"></script>
+<script src="./assets/jquery/jquery-ui.min.js"></script>
 <script src="modules.js"></script>
   <% prev = 0; t = tree(gctx, unit, public=True) %>
 </head>
