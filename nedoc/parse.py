@@ -61,6 +61,7 @@ def extract_imports(node, module):
                         prefix = module.cname
                     else:
                         prefix = module.parent.cname
+
                 elif n.level == 2:
                     if module.is_dir:
                         prefix = module.parent.cname

@@ -35,6 +35,9 @@ class Config:
         self.source_path = os.path.join(config_dir, main["source_path"])
         self.target_path = os.path.join(config_dir, main["target_path"])
 
+        if self.source_path.endswith(os.sep):
+            self.source_path = self.source_path[:-1]
+
         minimize = main.get("minimize_output", "true").strip().lower()
         if minimize not in ("true", "false"):
             raise Exception("Minize output expects boolean value: True/False")
