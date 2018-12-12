@@ -1,6 +1,6 @@
 from setuptools import setup
 import glob
-import os
+
 
 with open('requirements.txt') as reqs:
     requirements = [line for line in reqs.read().split('\n') if line]

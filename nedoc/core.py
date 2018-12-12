@@ -113,7 +113,8 @@ class Core:
             for unit in tqdm.tqdm(writes, desc="writedoc", total=len(units)):
                 pass
 
-            modules = [unit for unit in units if hasattr(unit, "source_code") and unit.source_code]
+            modules = [unit for unit in units
+                       if hasattr(unit, "source_code") and unit.source_code]
             renders = (renderer.render_source(unit) for unit in modules)
             writes = pool.imap_unordered(write_output, renders)
 

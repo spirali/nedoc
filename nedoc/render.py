@@ -75,7 +75,8 @@ class Renderer:
         for u in reversed(unit.path):
             new_result = [(1, uc)
                           for uc in u.all_units(gctx, public=public)]
-            new_result.sort(key=lambda t: (t[1].unit.sort_order, t[1].imported, t[1].name))
+            new_result.sort(
+                key=lambda t: (t[1].unit.sort_order, t[1].imported, t[1].name))
             if prev is not None:
                 idx = u.childs.index(prev)
                 new_result[idx+1:idx+1] = [(level + 1, uc)
@@ -113,8 +114,6 @@ class Renderer:
             render_cname=lambda cname: ".".join(cname),
             ctx=ctx,
         )
-        #output = htmlmin.minify(output, remove_empty_space=True)
-        #path = os.path.join(self.gctx.config.target_path, output_path)
 
 
 def write_output(conf):

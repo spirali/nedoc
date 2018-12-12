@@ -1,7 +1,3 @@
-import ast
-import asttokens
-
-from .utils import make_cname
 
 
 def is_public_name(name):
