@@ -1,11 +1,13 @@
-
-import mako.lookup
-import os
 import datetime
+import itertools
+import json
+import os
+
 import htmlmin
+import mako.lookup
+from mako.filters import html_escape
 
 from .unit import Module, Function, Class, UnitChild
-from mako.filters import html_escape
 
 
 #  from .rst import convert_rst_to_html
@@ -108,6 +110,19 @@ class Renderer:
         return (path,
                 self._render(self.templates["source"], ctx, unit),
                 self.gctx.config.minimize_output)
+
+    def render_tree_js(self, units):
+        def get_all(unit):
+            return [item for item in unit.traverse() if not isinstance(item, Function)]
+
+        ctx = RenderContext(None, self.gctx)
+        modules = (((child.fullname, ctx.link_to(child)) for child in get_all(unit))
+                   for unit in units)
+        modules = sorted(set(itertools.chain.from_iterable(modules)))
+        path = os.path.abspath(os.path.join(self.gctx.config.target_path, "modules.js"))
+
+        with open(path, "w") as f:
+            f.write("var NEDOC_MODULES = JSON.parse('{}');\n".format(json.dumps(modules)))
 
     def _render(self, template, ctx, unit):
         return template.render(

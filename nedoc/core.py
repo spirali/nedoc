@@ -87,7 +87,7 @@ class Core:
             construct_module(atok, atok.tree, module)
 
         for root in self.gctx.toplevel_modules():
-            for module in root.travese():
+            for module in root.traverse():
                 module.finalize(self.gctx)
 
     def build(self):
@@ -103,7 +103,7 @@ class Core:
         self.copy_assets()
         renderer = Renderer(self.gctx)
         for root in self.gctx.toplevel_modules():
-            units = list(root.travese())
+            units = list(root.traverse())
 
             pool = multiprocessing.Pool()
 
@@ -127,3 +127,5 @@ class Core:
 
             for unit in tqdm.tqdm(writes, desc="writesrc", total=len(modules)):
                 pass
+
+            renderer.render_tree_js(units)

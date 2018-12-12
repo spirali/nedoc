@@ -11,10 +11,7 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-  <%!
-    import json, itertools
-  %>
+<script src="modules.js"></script>
   <% prev = 0; t = tree(gctx, unit, public=True) %>
 </head>
 <body>
@@ -88,9 +85,8 @@ else:
     <div>
 </div>
   <script type="text/javascript">
-    var modules = JSON.parse('${json.dumps(sorted(set(list(itertools.chain.from_iterable(((child.fullname, ctx.link_to(child)) for child in v.get_all()) for (k, v) in gctx.modules.items()))))) | n}');
     $(".search").autocomplete({
-      source: modules.map(function(i) { return { label: i[0], value: i[1] }; }),
+      source: NEDOC_MODULES.map(function(i) { return { label: i[0], value: i[1] }; }),
       select: function(event, ui) {
           window.location.href = ui.item.value;
       }

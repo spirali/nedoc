@@ -94,17 +94,10 @@ class Unit:
                     return child.find_by_cname(cname[1:], gctx)
         return None
 
-    def travese(self):
+    def traverse(self):
         for child in self.childs:
-            yield from child.travese()
+            yield from child.traverse()
         yield self
-
-    def get_all(self):
-        names = []
-        for item in self.travese():
-            if not isinstance(item, Function):
-                names.append(item)
-        return names
 
     def finalize(self, gctx):
         self.childs.sort(key=lambda unit: (unit.sort_order, unit.name))
