@@ -21,7 +21,9 @@ minimize_output = True
 
 class Config:
 
+
     def __init__(self, config_path):
+        self.debug = False
         config_path = os.path.abspath(config_path)
         config_dir = os.path.dirname(config_path)
 

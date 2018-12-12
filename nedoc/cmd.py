@@ -3,13 +3,16 @@ from . import config, core
 
 import os
 import sys
+import logging
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
         "nedoc", description='Python documentation generator')
     ps = parser.add_subparsers(help="Command", dest="command")
-    ps.add_parser("build")
+    p = ps.add_parser("build")
+    p.add_argument("--debug", default=False, action="store_true")
+
 
     p = ps.add_parser("init")
     p.add_argument("project_name")
@@ -37,6 +40,10 @@ def main():
             "./nedoc.conf", args.project_name, args.source_path)
 
     if args.command == "build":
+        if args.debug:
+            logging.basicConfig(level=logging.DEBUG)
+            logging.info("Debug mode enabled")
+
         path = "./nedoc.conf"
         if not os.path.isfile(path):
             if os.path.isdir(path):
@@ -48,6 +55,7 @@ def main():
             sys.exit(1)
 
         conf = config.Config(path)
+        conf.debug = args.debug
 
         if conf.source_path.endswith("."):
             sys.stderr.write("Error: Source directory cannot end by '.'\n")

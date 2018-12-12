@@ -108,15 +108,22 @@ class Core:
             pool = multiprocessing.Pool()
 
             renders = (renderer.render_unit(unit) for unit in units)
-            writes = pool.imap_unordered(write_output, renders)
+            if self.gctx.config.debug:
+                writes = (write_output(x) for x in renders)
+            else:
+                writes = pool.imap_unordered(write_output, renders)
 
             for unit in tqdm.tqdm(writes, desc="writedoc", total=len(units)):
                 pass
 
             modules = [unit for unit in units
                        if hasattr(unit, "source_code") and unit.source_code]
+
             renders = (renderer.render_source(unit) for unit in modules)
-            writes = pool.imap_unordered(write_output, renders)
+            if self.gctx.config.debug:
+                writes = (write_output(x) for x in renders)
+            else:
+                writes = pool.imap_unordered(write_output, renders)
 
             for unit in tqdm.tqdm(writes, desc="writesrc", total=len(modules)):
                 pass
