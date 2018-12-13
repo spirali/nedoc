@@ -12,6 +12,9 @@ from .unit import Module, Function, Class, UnitChild
 
 #  from .rst import convert_rst_to_html
 
+def link_to(unit):
+    return unit.fullname + ".html"
+
 
 class RenderContext:
 
@@ -21,7 +24,7 @@ class RenderContext:
         self.now = datetime.datetime.now()
 
     def link_to(self, unit):
-        return unit.fullname + ".html"
+        return link_to(unit)
 
     def link_to_cname(self, cname, absolute=False):
         if absolute:
@@ -111,14 +114,10 @@ class Renderer:
                 self._render(self.templates["source"], ctx, unit),
                 self.gctx.config.minimize_output)
 
-    def render_tree_js(self, units):
-        def get_all(unit):
-            return [item for item in unit.traverse() if not isinstance(item, Function)]
-
-        ctx = RenderContext(None, self.gctx)
-        modules = (((child.fullname, ctx.link_to(child)) for child in get_all(unit))
-                   for unit in units)
-        modules = sorted(set(itertools.chain.from_iterable(modules)))
+    def render_tree_js(self):
+        modules = [(unit.name, unit.fullname)
+                   for unit in self.gctx.get_all_units()]
+        modules.sort()
         path = os.path.abspath(os.path.join(self.gctx.config.target_path, "modules.js"))
 
         with open(path, "w") as f:

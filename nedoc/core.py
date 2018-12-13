@@ -30,6 +30,10 @@ class GlobalContext:
         return [module for cname, module in self.modules.items()
                 if len(cname) == 1]
 
+    def get_all_units(self):
+        for module in self.toplevel_modules():
+            yield from module.traverse()
+
 
 class Core:
 
@@ -102,6 +106,7 @@ class Core:
     def render(self):
         self.copy_assets()
         renderer = Renderer(self.gctx)
+        renderer.render_tree_js()
         for root in self.gctx.toplevel_modules():
             units = list(root.traverse())
 
@@ -127,5 +132,3 @@ class Core:
 
             for unit in tqdm.tqdm(writes, desc="writesrc", total=len(modules)):
                 pass
-
-            renderer.render_tree_js(units)
