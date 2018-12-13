@@ -22,8 +22,8 @@
             ${gctx.config.project_version}
         </div>
 
-<div>
-  <input class="search" style="color: black;" />
+<div id="sbox">
+<input id="search" style="color: black;" placeholder="search ..."/>
 </div>
 
         <div class="tree">
@@ -84,13 +84,5 @@ else:
     </p>
     <div>
 </div>
-  <script type="text/javascript">
-    $(".search").autocomplete({
-      source: NEDOC_MODULES.map(function(i) { return { label: i[0], value: i[1] }; }),
-      select: function(event, ui) {
-          window.location.href = ui.item.value;
-      }
-    });
-  </script>
 </body>
 </html>

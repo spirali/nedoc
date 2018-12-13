@@ -67,6 +67,7 @@ a:visited.symbol {
   color: rgb(61, 79, 93);
   border-radius: 5px;
   padding: 0.3em 0.3em 0.3em 0.3em;
+  margin-right: 1em;
 }
 
 .selectimp a:visited {
@@ -165,6 +166,20 @@ a:visited.sourcelink {
 
 .footer a {
   color: gray;
+}
+
+#sbox {
+  margin-left: 2em;
+  margin-right: 2em;
+  margin-top: 1em;
+}
+
+#search {
+  border-radius: 5px;
+  border-color: gray;
+  height: 2em;
+  padding-left: 0.5em;
+  width: 100%;
 }
 
 @media (min-width: 48em) {
