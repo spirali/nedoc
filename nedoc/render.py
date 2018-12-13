@@ -115,19 +115,20 @@ class Renderer:
                 self.gctx.config.minimize_output)
 
     def render_tree_js(self):
-        modules = [(unit.name, unit.fullname)
-                   for unit in self.gctx.get_all_units()]
+        modules = [(unit.name, unit.parent.fullname)
+                   for unit in self.gctx.get_all_units()
+                   if unit.parent]
         modules.sort()
         path = os.path.abspath(os.path.join(self.gctx.config.target_path, "modules.js"))
 
         with open(path, "w") as f:
             f.write("""
 $(function() {
-    var NEDOC_MODULES = JSON.parse('%DATA%');\n
+    var NEDOC_MODULES = %DATA%;\n
     $("#search").autocomplete({
-    source: NEDOC_MODULES.map(function(i) { return { label: i[0], desc: i[1], value: i[1] }; }),
+    source: NEDOC_MODULES.map(function(i) { return { label: i[0], desc: i[1] }; }),
     select: function(event, ui) {
-        window.location.href = ui.item.value + ".html";
+        window.location.href = ui.item.desc + "." + ui.item.label + ".html";
     },
     }).autocomplete( "instance" )._renderItem = function( ul, item ) {
     return $("<li>")
