@@ -142,6 +142,33 @@ class Module(Unit):
     def all_functions(self, gctx, public=None):
         return self.all_units(gctx, public, Function)
 
+    def imported_units(self, gctx, public=None, export=False, cls=None):
+        result = []
+        path = self.path
+        names = set(unit.name for unit in self.childs)
+        for k, v in self.imports.items():
+            if k in names:
+                continue
+            if public is not None and public != is_public_name(k):
+                continue
+            unit = gctx.find_by_cname(v)
+            if cls is not None and not isinstance(unit, cls):
+                continue
+            p = unit.path
+            if export and p[:len(path)] != path:
+                continue
+            result.append((k, unit))
+        return result
+
+    def imported_classes(self, gctx, public=None, export=False):
+        return self.imported_units(gctx, public=public, cls=Class, export=export)
+
+    def imported_functions(self, gctx, public=None, export=False):
+        return self.imported_units(gctx, public=public, cls=Function, export=export)
+
+    def imported_modules(self, gctx, public=None, export=False):
+        return self.imported_units(gctx, public=public, cls=Module, export=export)
+
     def finalize(self, gctx):
         super().finalize(gctx)
         for name, target in self.imports.items():

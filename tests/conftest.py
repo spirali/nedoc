@@ -23,6 +23,7 @@ This is super nice testing project!
 
 from .mymodule1.myclass import MyClass
 from myproject.mymodule1.functions import one_arg
+from .mymodule1 import another
 ''')
 
     m = p.mkdir("mymodule1")
