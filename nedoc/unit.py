@@ -208,6 +208,7 @@ class Class(Unit):
         super().__init__(name)
         self.name = name
         self.bases = bases
+        self.subclasses = []
 
     def traverse_super(self, gctx):
         for base in self.bases:
@@ -221,6 +222,13 @@ class Class(Unit):
             for child in unit.functions():
                 if child.name == name:
                     return child
+
+    def finalize(self, gctx):
+        super().finalize(gctx)
+        for base in self.bases:
+            unit = self.module().find_by_cname(base, gctx)
+            if isinstance(unit, Class):
+                unit.subclasses.append(self)
 
     def inherited_methods(self, gctx, public):
         results = []

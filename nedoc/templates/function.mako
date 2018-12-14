@@ -45,11 +45,12 @@ ${ctx.render_docstring(unit.overrides) | n}
 ## -- Overrides
 % if unit.overriden_by:
 <h2>Overrides</h2>
-<p>This method is overriden by:
+<p>This method is overriden by:</p>
+<ul class="deflst">
 % for u in unit.overriden_by:
     <li>${link_to_unit(u)}</li>
 % endfor
-</p>
+</ul>
 % endif
 
 ## Aliases

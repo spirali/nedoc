@@ -64,6 +64,15 @@ ${link_to_unit(m, True)}${"" if loop.last else ", "}\
 ${ctx.render_docstring(unit) | n}
 % endif
 
+## -- Subclasses
+% if unit.subclasses:
+<h2>Subclasses</h2>
+<ul class="deflst">
+% for u in unit.subclasses:
+    <li>${link_to_unit(u)}</li>
+% endfor
+</ul>
+% endif
 
 ## Aliases
 %if unit.aliases:
