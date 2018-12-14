@@ -208,6 +208,8 @@ class Function(Unit):
         self.args = args
         self.overrides = None
         self.overriden_by = []
+        self.static_method = False
+        self.class_method = False
 
     @property
     def is_method(self):

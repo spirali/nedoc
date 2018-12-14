@@ -31,6 +31,14 @@ def construct_function(atok, node):
         a.default = atok.get_text(d)
     unit = Function(node.name, args)
     unit.docstring = ast.get_docstring(node)
+
+    for d in node.decorator_list:
+        if isinstance(d, ast.Name) and d.id == "staticmethod":
+            unit.static_method = True
+
+        if isinstance(d, ast.Name) and d.id == "classmethod":
+            unit.class_method = True
+
     return unit
 
 

@@ -7,6 +7,13 @@
 
 <p>${unit.docline}</p>
 
+% if unit.static_method:
+<span class="label">static method</span>\
+% endif
+% if unit.class_method:
+<span class="label">class method</span>\
+% endif
+
 ## -- Declaration --
 <h2>Declaration</h2>
 <% arg_style = {

@@ -111,6 +111,17 @@ class MyClass(BaseClass, another.AnotherClass):
         "Have own doc"
         pass
 
+    @staticmethod
+    @functools.lru_cache(maxsize=None)
+    def static_method(a):
+        pass
+
+    @classmethod
+    @functools.lru_cache(maxsize=None)
+    def class_method(cls, a):
+        """ Class method comment """
+        pass
+
 class MyClass2(AnotherClass2):
     pass
 
