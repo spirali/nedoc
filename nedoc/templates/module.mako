@@ -2,7 +2,8 @@
 <%namespace file="utils.mako" import="symbol_link, link_to_source, link_to_unit"/>
 
 ## Header
-<h1>Module ${link_to_unit(unit)}</h1>
+<h1>Module ${unit.name}</h1>
+<div id="path">${link_to_unit(unit)}</div>
 
 <p>${unit.docline}</p>
 

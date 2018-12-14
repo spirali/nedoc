@@ -3,7 +3,7 @@
 
 ## Header
 <h1>Class ${unit.name}</h1>
-In ${link_to_unit(unit.parent)}
+<div id="path">${link_to_unit(unit)}</div>
 
 <p>${unit.docline}</p>
 
