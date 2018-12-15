@@ -1,5 +1,4 @@
 import datetime
-import itertools
 import json
 import os
 
@@ -119,23 +118,14 @@ class Renderer:
                    for unit in self.gctx.get_all_units()
                    if unit.parent]
         modules.sort()
-        path = os.path.abspath(os.path.join(self.gctx.config.target_path, "modules.js"))
 
+        template = os.path.join(os.path.dirname(__file__), "templates/nedoc.js")
+        path = os.path.abspath(os.path.join(self.gctx.config.target_path, "nedoc.js"))
+
+        with open(template) as f:
+            content = f.read()
         with open(path, "w") as f:
-            f.write("""
-$(function() {
-    var NEDOC_MODULES = %DATA%;\n
-    $("#search").autocomplete({
-    source: NEDOC_MODULES.map(function(i) { return { label: i[0], desc: i[1] }; }),
-    select: function(event, ui) {
-        window.location.href = ui.item.desc + "." + ui.item.label + ".html";
-    },
-    }).autocomplete( "instance" )._renderItem = function( ul, item ) {
-    return $("<li>")
-        .append("<div><b>" + item.label + "</b><br>" + item.desc + "</div>")
-        .appendTo( ul );
-    };
-})""".replace("%DATA%", json.dumps(modules)))
+            f.write(content.replace("%MODULES%", json.dumps(modules)))
 
     def _render(self, template, ctx, unit):
         return template.render(

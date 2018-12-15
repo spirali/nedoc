@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="./assets/jquery/jquery-ui.min.css">
 <script src="./assets/jquery/jquery-3.0.0.min.js"></script>
 <script src="./assets/jquery/jquery-ui.min.js"></script>
-<script src="modules.js"></script>
+<script src="nedoc.js"></script>
   <% prev = 0; t = tree(gctx, unit, public=True) %>
 </head>
 <body>
