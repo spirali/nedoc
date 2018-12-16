@@ -94,6 +94,11 @@ class Unit:
                     return child.find_by_cname(cname[1:], gctx)
         return None
 
+    def local_find(self, name):
+        for child in self.childs:
+            if child.name == name:
+                return child
+
     def traverse(self):
         for child in self.childs:
             yield from child.traverse()

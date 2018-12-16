@@ -1,6 +1,7 @@
 from nedoc.core import Core
 from nedoc.config import create_config_file, Config
 from nedoc.utils import parse_cname
+from nedoc.unit import Function
 
 import os
 
@@ -49,6 +50,24 @@ def test_project1(project1):
     m = myclass.module()
     assert find(m, MyClass.bases[0]).name == "BaseClass"
     assert find(m, MyClass.bases[1]).name == "AnotherClass"
+
+    mt = MyClass.local_find("abs_method")
+    assert isinstance(mt, Function)
+    assert mt.is_method
+    assert not mt.is_static()
+    assert mt.abstract_method
+
+    mt = MyClass.local_find("static_method")
+    assert isinstance(mt, Function)
+    assert mt.is_method and mt.static_method and not mt.class_method
+    assert mt.is_static()
+    assert not mt.abstract_method
+
+    mt = MyClass.local_find("class_method")
+    assert isinstance(mt, Function)
+    assert mt.is_method and not mt.static_method and mt.class_method
+    assert mt.is_static()
+    assert not mt.abstract_method
 
     MyClass = find(myclass, parse_cname("MyClass2"))
     assert MyClass.name == "MyClass2"

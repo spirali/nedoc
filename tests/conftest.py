@@ -122,6 +122,10 @@ class MyClass(BaseClass, another.AnotherClass):
         """ Class method comment """
         pass
 
+    @abc.abstractmethod
+    def abs_method(self, z):
+        pass
+
 class MyClass2(AnotherClass2):
     pass
 
