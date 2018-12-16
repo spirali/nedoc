@@ -29,7 +29,7 @@ def construct_function(atok, node):
     args = [Argument(a.arg, None) for a in node.args.args]
     for a, d in zip(reversed(args), reversed(node.args.defaults)):
         a.default = atok.get_text(d)
-    unit = Function(node.name, args, node.lineno)
+    unit = Function(node.name, node.lineno, args)
     unit.docstring = ast.get_docstring(node)
 
     for d in node.decorator_list:
@@ -48,7 +48,7 @@ def construct_function(atok, node):
 def construct_class(atok, node):
     assert isinstance(node, ast.ClassDef)
     bases = [construct_cname(n) for n in node.bases]
-    unit = Class(node.name, bases, node.lineno)
+    unit = Class(node.name, node.lineno, bases)
     construct_unit_body(atok, node, unit)
     return unit
 

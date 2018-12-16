@@ -15,9 +15,10 @@ class UnitChild:
 
 class Unit:
 
-    def __init__(self, name):
+    def __init__(self, name, lineno):
         self.parent = None
         self.name = name
+        self.lineno = lineno
         self.docstring = None
         self.childs = []
         self.aliases = []
@@ -120,7 +121,7 @@ class Module(Unit):
     keyword = ""
 
     def __init__(self, name, is_dir, source_filename):
-        super().__init__(name)
+        super().__init__(name, None)
         self.imports = {}
         self.is_dir = is_dir
         self.source_filename = source_filename
@@ -208,15 +209,14 @@ class Function(Unit):
     sort_order = 2
     keyword = "def"
 
-    def __init__(self, name, args, lineno):
-        super().__init__(name)
+    def __init__(self, name, lineno, args):
+        super().__init__(name, lineno)
         self.args = args
         self.overrides = None
         self.overriden_by = []
         self.static_method = False
         self.class_method = False
         self.abstract_method = False
-        self.lineno = lineno
 
     @property
     def is_method(self):
@@ -243,12 +243,11 @@ class Class(Unit):
     sort_order = 1
     keyword = "class"
 
-    def __init__(self, name, bases, lineno):
-        super().__init__(name)
+    def __init__(self, name, lineno, bases):
+        super().__init__(name, lineno)
         self.name = name
         self.bases = bases
         self.subclasses = []
-        self.lineno = lineno
 
     def traverse_super(self, gctx):
         for base in self.bases:

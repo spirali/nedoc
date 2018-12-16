@@ -40,7 +40,7 @@ class RenderContext:
             return None
         url = "source+{}.html".format(
             module.source_filename.replace(os.sep, "."))
-        if module is unit:
+        if unit.lineno is None:
             return url
         else:
             return "{}#line-{}".format(url, unit.lineno - 1)
