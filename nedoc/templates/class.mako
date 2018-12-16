@@ -22,11 +22,35 @@ ${symbol_link(base)}${"" if loop.last else ", "}\
 <div class="idnt">${link_to_source(unit, "source code")}</div>
 </div>
 
-## Methods
-% if unit.functions:
+<%
+  functions = unit.functions(public=True)
+  instance_methods = [u for u in functions if not u.is_static()]
+  static_methods = [u for u in functions if u.is_static()]
+%>
+
+## Instance methods
+% if instance_methods:
 <h2>Methods</h2>
 <ul class="deflst">
-% for child in unit.functions(public=True):
+% for child in instance_methods:
+    <li><div class="def">def <a class="symbol" href="${ctx.link_to(child)}">${child.name}</a>(<span class="args">${child.render_args()}</span>)
+        ${function_labels(child)}
+        </div>
+        % if child.docline:
+        <div class="docline">${child.docline}</div>
+        % elif child.overrides and child.overrides.docline:
+        <div class="docline"><span class="label">inherited doc</span> ${child.overrides.docline}</div>
+        % endif
+        </li>
+% endfor
+</ul>
+% endif
+
+## Static methods
+% if static_methods:
+<h2>Static methods</h2>
+<ul class="deflst">
+% for child in static_methods:
     <li><div class="def">def <a class="symbol" href="${ctx.link_to(child)}">${child.name}</a>(<span class="args">${child.render_args()}</span>)
         ${function_labels(child)}
         </div>

@@ -229,6 +229,9 @@ class Function(Unit):
                 self.overrides = child
                 child.overriden_by.append(self)
 
+    def is_static(self):
+        return self.is_method and (self.class_method or self.static_method)
+
 
 class Class(Unit):
 
