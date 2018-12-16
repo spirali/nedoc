@@ -1,4 +1,4 @@
-<%namespace file="utils.mako" import="symbol_link, link_to_source, link_to_unit"/>
+<%namespace file="utils.mako" import="symbol_link, link_to_source, link_to_unit, function_labels"/>
 <%inherit file="base.mako" />
 
 ## Header
@@ -28,15 +28,7 @@ ${symbol_link(base)}${"" if loop.last else ", "}\
 <ul class="deflst">
 % for child in unit.functions(public=True):
     <li><div class="def">def <a class="symbol" href="${ctx.link_to(child)}">${child.name}</a>(<span class="args">${child.render_args()}</span>)
-        % if child.overrides:
-        <span class="label">override</span>\
-        % endif
-        % if child.static_method:
-        <span class="label">static method</span>\
-        % endif
-        % if child.class_method:
-        <span class="label">class method</span>\
-        % endif
+        ${function_labels(child)}
         </div>
         % if child.docline:
         <div class="docline">${child.docline}</div>

@@ -39,6 +39,9 @@ def construct_function(atok, node):
         if isinstance(d, ast.Name) and d.id == "classmethod":
             unit.class_method = True
 
+        if atok.get_text(d) == "abc.abstractmethod":
+            unit.abstract_method = True
+
     return unit
 
 

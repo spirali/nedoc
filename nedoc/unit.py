@@ -210,6 +210,7 @@ class Function(Unit):
         self.overriden_by = []
         self.static_method = False
         self.class_method = False
+        self.abstract_method = False
         self.lineno = lineno
 
     @property

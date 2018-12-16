@@ -22,3 +22,18 @@ ${render_cname(cname)}\
 %endfor
 % endif
 </%def>
+
+<%def name="function_labels(unit)">\
+% if unit.static_method:
+<span class="label">static method</span>\
+% endif
+% if unit.class_method:
+<span class="label">class method</span>\
+% endif
+% if unit.abstract_method:
+<span class="label">abstract method</span>\
+% endif
+% if unit.overrides:
+<span class="label">override</span>\
+% endif
+</%def>
