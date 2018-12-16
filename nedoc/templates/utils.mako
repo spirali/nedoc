@@ -9,7 +9,7 @@ ${render_cname(cname)}\
 
 <%def name="link_to_source(unit, label='Source code')">\
 % if ctx.link_to_source(unit.module()):
-<a class="sourcelink" href="${ctx.link_to_source(unit.module())}">${label}</a>\
+<a class="sourcelink" href="${ctx.link_to_source(unit)}">${label}</a>\
 % endif
 </%def>
 

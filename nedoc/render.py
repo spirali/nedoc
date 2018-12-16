@@ -35,17 +35,22 @@ class RenderContext:
         return self.link_to(unit)
 
     def link_to_source(self, unit):
-        if unit.source_filename is None:
+        module = unit.module()
+        if module.source_filename is None:
             return None
-        return "source+{}.html".format(
-            unit.source_filename.replace(os.sep, "."))
+        url = "source+{}.html".format(
+            module.source_filename.replace(os.sep, "."))
+        if module is unit:
+            return url
+        else:
+            return "{}#line-{}".format(url, unit.lineno - 1)
 
     def format_code(self, code):
         from pygments.formatters import HtmlFormatter
         from pygments import lexers
         from pygments import highlight
 
-        formatter = HtmlFormatter(linenos=True)
+        formatter = HtmlFormatter(linenos=True, lineanchors="line")
         lexer = lexers.get_lexer_by_name("python")
         return highlight(code, lexer, formatter)
 

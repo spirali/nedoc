@@ -203,13 +203,14 @@ class Function(Unit):
     sort_order = 2
     keyword = "def"
 
-    def __init__(self, name, args):
+    def __init__(self, name, args, lineno):
         super().__init__(name)
         self.args = args
         self.overrides = None
         self.overriden_by = []
         self.static_method = False
         self.class_method = False
+        self.lineno = lineno
 
     @property
     def is_method(self):
@@ -233,11 +234,12 @@ class Class(Unit):
     sort_order = 1
     keyword = "class"
 
-    def __init__(self, name, bases):
+    def __init__(self, name, bases, lineno):
         super().__init__(name)
         self.name = name
         self.bases = bases
         self.subclasses = []
+        self.lineno = lineno
 
     def traverse_super(self, gctx):
         for base in self.bases:
