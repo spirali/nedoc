@@ -25,7 +25,7 @@ ${symbol_link(base)}${"" if loop.last else ", "}\
 <%
   functions = unit.functions(public=True)
   instance_methods = [u for u in functions if not u.is_static()]
-  static_methods = [u for u in functions if u.is_static()]
+  class_methods = [u for u in functions if u.is_static()]
 %>
 
 ## Instance methods
@@ -47,10 +47,10 @@ ${symbol_link(base)}${"" if loop.last else ", "}\
 % endif
 
 ## Static methods
-% if static_methods:
-<h2>Static methods</h2>
+% if class_methods:
+<h2>Class methods</h2>
 <ul class="deflst">
-% for child in static_methods:
+% for child in class_methods:
     <li><div class="def">def <a class="symbol" href="${ctx.link_to(child)}">${child.name}</a>(<span class="args">${child.render_args()}</span>)
         ${function_labels(child)}
         </div>
