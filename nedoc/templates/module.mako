@@ -1,5 +1,6 @@
 <%inherit file="base.mako" />
 <%namespace file="utils.mako" import="symbol_link, link_to_source, link_to_unit"/>
+<%namespace file="function.mako" import="function_desc"/>
 
 ## Header
 <h1>Module ${unit.name}</h1>
@@ -79,10 +80,8 @@ ${link_to_source(unit)}
 <h2>Functions</h2>
 <ul class="deflst">
 % for u in unit.functions(public=True):
-    <li><div><span class="def">def <a class="symbol" href="${ctx.link_to(u)}">${u.name}</a>(<span class="args">${u.render_args()}</span>)</span></div>
-    % if u.docline:
-        <div class="docline">${u.docline}</div>
-    % endif
+    <li>
+        ${function_desc(u)}
     </li>
 % endfor
 </ul>

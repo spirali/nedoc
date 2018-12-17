@@ -119,6 +119,7 @@ class Module(Unit):
 
     sort_order = 0
     keyword = ""
+    role = "module"
 
     def __init__(self, name, is_dir, source_filename):
         super().__init__(name, None)
@@ -208,6 +209,7 @@ class Function(Unit):
 
     sort_order = 2
     keyword = "def"
+    role = "function"
 
     def __init__(self, name, lineno, args):
         super().__init__(name, lineno)
@@ -242,6 +244,7 @@ class Class(Unit):
 
     sort_order = 1
     keyword = "class"
+    role = "class"
 
     def __init__(self, name, lineno, bases):
         super().__init__(name, lineno)

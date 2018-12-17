@@ -33,8 +33,8 @@
 if uc.imported:
     continue
 child = uc.unit
-if child.childs:
-    if i + 1 < len(t) and t[i + 1][0] > level:
+if child.role == "module":
+    if (i + 1 < len(t) and t[i + 1][0] > level) or child == unit:
         marker = "&#9662;"
     else:
         marker = "&#9656;"

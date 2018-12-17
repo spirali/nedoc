@@ -1,4 +1,5 @@
-<%namespace file="utils.mako" import="symbol_link, link_to_source, link_to_unit, function_labels"/>
+<%namespace file="utils.mako" import="symbol_link, link_to_source, link_to_unit"/>
+<%namespace file="function.mako" import="function_desc, function_labels"/>
 <%inherit file="base.mako" />
 
 ## Header
@@ -33,15 +34,9 @@ ${symbol_link(base)}${"" if loop.last else ", "}\
 <h2>Methods</h2>
 <ul class="deflst">
 % for child in instance_methods:
-    <li><div class="def">def <a class="symbol" href="${ctx.link_to(child)}">${child.name}</a>(<span class="args">${child.render_args()}</span>)
-        ${function_labels(child)}
-        </div>
-        % if child.docline:
-        <div class="docline">${child.docline}</div>
-        % elif child.overrides and child.overrides.docline:
-        <div class="docline"><span class="label">inherited doc</span> ${child.overrides.docline}</div>
-        % endif
-        </li>
+    <li>
+        ${function_desc(child)}
+    </li>
 % endfor
 </ul>
 % endif
@@ -51,15 +46,9 @@ ${symbol_link(base)}${"" if loop.last else ", "}\
 <h2>Class methods</h2>
 <ul class="deflst">
 % for child in class_methods:
-    <li><div class="def">def <a class="symbol" href="${ctx.link_to(child)}">${child.name}</a>(<span class="args">${child.render_args()}</span>)
-        ${function_labels(child)}
-        </div>
-        % if child.docline:
-        <div class="docline">${child.docline}</div>
-        % elif child.overrides and child.overrides.docline:
-        <div class="docline"><span class="label">inherited doc</span> ${child.overrides.docline}</div>
-        % endif
-        </li>
+    <li>
+        ${function_desc(child)}
+    </li>
 % endfor
 </ul>
 % endif

@@ -12,7 +12,10 @@ from .unit import Module, Function, Class, UnitChild
 #  from .rst import convert_rst_to_html
 
 def link_to(unit):
-    return unit.fullname + ".html"
+    if isinstance(unit, Function):
+        return unit.parent.fullname + ".html#" + unit.name
+    else:
+        return unit.fullname + ".html"
 
 
 class RenderContext:
@@ -83,7 +86,8 @@ class Renderer:
         prev = None
         for u in reversed(unit.path):
             new_result = [(1, uc)
-                          for uc in u.all_units(gctx, public=public)]
+                          for uc in u.all_units(gctx, public=public)
+                          if uc.unit.role != "function"]
             new_result.sort(
                 key=lambda t: (t[1].unit.sort_order, t[1].imported, t[1].name))
             if prev is not None:
@@ -118,8 +122,8 @@ class Renderer:
                 self._render(self.templates["source"], ctx, unit),
                 self.gctx.config.minimize_output)
 
-    def render_tree_js(self):
-        modules = [(unit.name, unit.parent.fullname)
+    def render_nedoc_js(self):
+        modules = [(unit.name, unit.parent.fullname, not isinstance(unit, Function))
                    for unit in self.gctx.get_all_units()
                    if unit.parent]
         modules.sort()

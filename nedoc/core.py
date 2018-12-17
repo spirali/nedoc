@@ -3,7 +3,7 @@ import logging
 import distutils.dir_util
 import tqdm
 
-from .unit import Module
+from .unit import Module, Class
 from .parse import construct_module, parse_path
 from .render import Renderer, write_output
 
@@ -106,9 +106,10 @@ class Core:
     def render(self):
         self.copy_assets()
         renderer = Renderer(self.gctx)
-        renderer.render_tree_js()
+        renderer.render_nedoc_js()
         for root in self.gctx.toplevel_modules():
-            units = list(root.traverse())
+            units = [unit for unit in root.traverse()
+                     if isinstance(unit, Class) or isinstance(unit, Module)]
 
             pool = multiprocessing.Pool()
 

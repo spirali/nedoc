@@ -85,7 +85,6 @@ a:visited.symbol {
   padding: 0.3em 0.3em 0.3em 0.3em;
 }
 
-
 a {
   color: inherit;
 }
@@ -94,6 +93,7 @@ a {
   /*background-color: rgb(61, 79, 93);*/
   background-color: #ddd;
   padding: 0.5em 1em 0.5em 1em;
+  margin-bottom: 0.5em;
   /*color: white;*/
   border-radius: 5px;
 }
@@ -189,6 +189,10 @@ h1 {
 
 #path {
   margin-bottom: 1.5em;
+}
+
+.fdetail {
+  display: none;
 }
 
 @media (min-width: 48em) {
