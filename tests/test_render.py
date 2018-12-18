@@ -1,14 +1,4 @@
-from nedoc.core import Core
-from nedoc.config import create_config_file, Config
-
-
-def load_project(project):
-    conf_path = str(project.join("nedoc.conf"))
-    create_config_file(conf_path, "Project1", "myproject")
-    conf = Config(conf_path)
-    core = Core(conf)
-    core.build_modules()
-    return core
+from conftest import load_project
 
 
 def test_render_args(project1):

@@ -1,9 +1,10 @@
-from nedoc.core import Core
-from nedoc.config import create_config_file, Config
-from nedoc.utils import parse_cname
-from nedoc.unit import Function
-
 import os
+
+from conftest import load_project
+from nedoc.config import create_config_file, parse_config
+from nedoc.core import Core
+from nedoc.unit import Function
+from nedoc.utils import parse_cname
 
 
 def test_project1(project1):
@@ -13,7 +14,7 @@ def test_project1(project1):
     conf_path = str(project1.join("nedoc.conf"))
     create_config_file(conf_path, "Project1", "myproject")
 
-    conf = Config(conf_path)
+    conf = parse_config(conf_path)
 
     core = Core(conf)
     assert set(core.scan_directories()) == {
@@ -86,3 +87,23 @@ def test_project1(project1):
     c = m.local_find("C")
     mt = c.local_find("method")
     assert mt.overriden_docline() == "Method doc"
+
+
+def test_copy_init_docstring_enabled(project1):
+    core = load_project(project1, build=False)
+    core.gctx.config.copy_init_docstring = True
+    core.build_modules()
+
+    module = core.gctx.modules[("myproject", "mymodule1", "another")]
+    cls = module.find_by_cname(parse_cname("NoDocClass"), core.gctx)
+    assert cls.docstring == "Here is my doc comment"
+
+
+def test_copy_init_docstring_disabled(project1):
+    core = load_project(project1, build=False)
+    core.gctx.config.copy_init_docstring = False
+    core.build_modules()
+
+    module = core.gctx.modules[("myproject", "mymodule1", "another")]
+    cls = module.find_by_cname(parse_cname("NoDocClass"), core.gctx)
+    assert not cls.docstring

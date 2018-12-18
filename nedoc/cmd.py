@@ -57,7 +57,7 @@ def main():
                     .format(path))
             sys.exit(1)
 
-        conf = config.Config(path)
+        conf = config.parse_config(path)
         conf.debug = args.debug
 
         if conf.source_path.endswith("."):
