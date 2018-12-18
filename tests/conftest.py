@@ -1,5 +1,6 @@
 import os
 import sys
+
 import pytest
 
 TESTS = os.path.dirname(__file__)
@@ -7,7 +8,8 @@ ROOT = os.path.dirname(TESTS)
 
 sys.path.insert(0, ROOT)
 
-from nedoc.unit import Module  # noqa
+from nedoc.config import create_config_file, parse_config  # noqa
+from nedoc.core import Core  # noqa
 
 
 @pytest.fixture()
@@ -174,6 +176,11 @@ class AnotherClass2:
 
 class AnotherClass3:
     pass
+
+class NoDocClass:
+    def __init__(self):
+        """Here is my doc comment"""
+        pass
 ''')
 
     m.join("inheritaceofdoc.py").write('''
@@ -200,3 +207,13 @@ class ThisIsTrap:
 + and + not + parsable +
 ''')
     return tmpdir
+
+
+def load_project(project, build=True):
+    conf_path = str(project.join("nedoc.conf"))
+    create_config_file(conf_path, "Project1", "myproject")
+    conf = parse_config(conf_path)
+    core = Core(conf)
+    if build:
+        core.build_modules()
+    return core

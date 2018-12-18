@@ -1,14 +1,14 @@
-import os
-import logging
 import distutils.dir_util
+import logging
+import multiprocessing
+import os
+
 import tqdm
 
-from .unit import Module, Class
 from .parse import construct_module, parse_path
-from .render import Renderer, write_output, link_to
+from .render import Renderer, link_to, write_output
+from .unit import Class, Module
 from .version import VERSION
-
-import multiprocessing
 
 
 class GlobalContext:

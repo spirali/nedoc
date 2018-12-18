@@ -285,10 +285,10 @@ class Class(Unit):
 
     def finalize(self, gctx):
         super().finalize(gctx)
-        for base in self.bases:
-            unit = self.module().find_by_cname(base, gctx)
-            if isinstance(unit, Class):
-                unit.subclasses.append(self)
+        self._add_subclasses(gctx)
+
+        if gctx.config.copy_init_docstring:
+            self._copy_init_docstring()
 
     def inherited_methods(self, gctx, public):
         results = []
@@ -303,3 +303,16 @@ class Class(Unit):
                 lst.sort(key=lambda u: u.name)
                 results.append((unit, lst))
         return results
+
+    def _add_subclasses(self, gctx):
+        for base in self.bases:
+            unit = self.module().find_by_cname(base, gctx)
+            if isinstance(unit, Class):
+                unit.subclasses.append(self)
+
+    def _copy_init_docstring(self):
+        if not self.docstring:
+            fns = self.functions()
+            init = [f for f in fns if f.name == "__init__"]
+            if init and init[0].docstring:
+                self.docstring = init[0].docstring
