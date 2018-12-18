@@ -29,6 +29,8 @@ def construct_function(atok, node):
     args = [Argument(a.arg, None) for a in node.args.args]
     for a, d in zip(reversed(args), reversed(node.args.defaults)):
         a.default = atok.get_text(d)
+        if a.default == "(),":
+            a.default = "()"
     unit = Function(node.name, node.lineno, args)
     unit.docstring = ast.get_docstring(node)
 
