@@ -81,7 +81,7 @@
     % if unit.overriden_by:
     <h3>Overrides</h3>
         <p>This method is overriden in:</p>
-        <ul class="deflst">
+        <ul class="deflst2">
         % for u in unit.overriden_by:
             <li>${link_to_unit(u.parent)}</li>
         % endfor
@@ -91,7 +91,7 @@
     ## Aliases
     %if unit.aliases:
         <h3>Reexports</h3>
-        <ul class="deflst">
+        <ul class="deflst2">
         % for alias in sorted(unit.aliases):
         <li>
             %if alias[-1] != unit.name:

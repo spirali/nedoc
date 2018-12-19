@@ -19,6 +19,27 @@ ul.deflst li:nth-child(odd) {
 ul.deflst li:nth-child(even) {
   border: 1px solid #ddd;
   margin-top: -1px;
+  background-color: white;
+  padding: 12px;
+}
+
+ul.deflst2 {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul.deflst2 li:nth-child(odd) {
+  border: 1px solid #ddd;
+  margin-top: -1px;
+  background-color: #e4e4e4;
+  padding: 12px;
+}
+
+ul.deflst2 li:nth-child(even) {
+  border: 1px solid #ddd;
+  margin-top: -1px;
+  background-color: white;
   padding: 12px;
 }
 
