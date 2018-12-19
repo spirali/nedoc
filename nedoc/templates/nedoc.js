@@ -19,7 +19,7 @@ $(function() {
         event.preventDefault();
         var elem = $(this);
         var parent = elem.closest(".fn");
-        parent.children(".fshort").toggle(200);
+        //parent.children(".fshort").toggle(200);
         parent.children(".fdetail").toggle(200);
     })
 });

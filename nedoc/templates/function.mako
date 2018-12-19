@@ -32,7 +32,6 @@
         % endif
         </div>
     <div class="fdetail">
-    <div style="margin-bottom: 0.6em;">&#9662; <a class="fexpand" href="${ctx.link_to(unit)}">Hide details</a></div>
     ${function_detail(unit)}
     </div>
 </%def>
@@ -43,6 +42,7 @@
         "default_style": ("<i>", "</i>")
     }
     %>
+    <h3>Declaration</h3>
     <div class="decl">
     %if len(unit.args) <= 1:
         <div class="def"><span class="kw">def</span> ${unit.name}(<span class="args">${unit.render_args(**arg_style) | n}</span>):
