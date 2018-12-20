@@ -114,6 +114,10 @@ class MyClass(BaseClass, another.AnotherClass):
     @staticmethod
     @functools.lru_cache(maxsize=None)
     def static_method(a):
+        """ Multi line
+        docline
+
+        this is rest of the doc"""
         pass
 
     @classmethod

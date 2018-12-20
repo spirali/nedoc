@@ -27,11 +27,14 @@ class Unit:
     def docline(self):
         if not self.docstring:
             return ""
-        lines = self.docstring.split("\n")
-        for line in lines:
-            if line:
-                return line
-        return ""
+        lines = self.docstring.strip().split("\n")
+        result = []
+        for line in lines[:3]:  # max 3 lines
+            line = line.strip()
+            if not line:
+                return " ".join(result)
+            result.append(line)
+        return " ".join(result)
 
     @property
     def path(self):
