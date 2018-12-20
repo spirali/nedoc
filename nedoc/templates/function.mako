@@ -59,10 +59,6 @@
     %endif
     </div>
 
-    <div>
-    ${function_labels(unit)}
-    </div>
-
     % if unit.overrides:
     <p>This method overrides ${link_to_unit(unit.overrides)}.</p>
     % endif
