@@ -164,6 +164,23 @@ class AnotherClass3:
     pass
 ''')
 
+    m.join("inheritaceofdoc.py").write('''
+
+class A:
+    """Class doc"""
+    def method(self, x, y):
+        """Method doc"""
+        pass
+
+class B(A):
+    def method(self, x, y):
+        pass
+
+class C(B):
+    def method(self, x, y):
+        pass
+''')
+
     m.join("garbage.txt").write('''
 class ThisIsTrap:
     pass

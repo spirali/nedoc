@@ -16,12 +16,13 @@ def test_project1(project1):
     conf = Config(conf_path)
 
     core = Core(conf)
-    assert set(core.scan_directories()) == set([
+    assert set(core.scan_directories()) == {
         "myproject/__init__.py",
         "myproject/mymodule1/myclass.py",
         "myproject/mymodule1/another.py",
-        "myproject/mymodule1/functions.py"]
-    )
+        "myproject/mymodule1/functions.py",
+        "myproject/mymodule1/inheritaceofdoc.py"
+    }
 
     core.build()
 
@@ -80,3 +81,8 @@ def test_project1(project1):
     assert find(m, MyClass.bases[0]).name == "AnotherClass3"
 
     assert myproject.all_classes(core.gctx)[0].name == "MyClass"
+
+    m = modules[("myproject", "mymodule1", "inheritaceofdoc")]
+    c = m.local_find("C")
+    mt = c.local_find("method")
+    assert mt.overriden_docline() == "Method doc"

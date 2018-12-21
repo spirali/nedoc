@@ -27,8 +27,11 @@
         </span>
         % if unit.docline:
             <div class="docline">${unit.docline}</div>
-        % elif unit.overrides and unit.overrides.docline:
-            <div class="docline"><span class="label">inherited doc</span> ${unit.overrides.docline}</div>
+        % else:
+            <% docline = unit.overriden_docline() %>
+            % if docline:
+                <div class="docline"><span class="label">inherited doc</span> ${docline}</div>
+            %endif
         % endif
         </div>
     <div class="fdetail">
@@ -67,10 +70,10 @@
     % if unit.docstring:
         <h3>Documentation</h3>
         ${ctx.render_docstring(unit) | n}
-    % elif unit.overrides and unit.overrides.docstring:
+    % elif unit.overriden_docstring():
         <h3>Documentation</h3>
         <span class="label">inherited documentation</span>
-        ${ctx.render_docstring(unit.overrides) | n}
+        ${ctx.render_docstring(unit.overriden_docstring()) | n}
     %endif
 
     ## -- Overrides

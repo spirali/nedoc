@@ -6,7 +6,7 @@ import htmlmin
 import mako.lookup
 from mako.filters import html_escape
 
-from .unit import Module, Function, Class, UnitChild
+from .unit import Module, Function, Class, UnitChild, Unit
 
 
 #  from .rst import convert_rst_to_html
@@ -57,8 +57,14 @@ class RenderContext:
         lexer = lexers.get_lexer_by_name("python")
         return highlight(code, lexer, formatter)
 
-    def render_docstring(self, unit):
-        return "<pre>{}</pre>".format(html_escape(unit.docstring))
+    def render_docstring(self, unit_or_docstring):
+        if isinstance(unit_or_docstring, Unit):
+            docstring = unit_or_docstring.docstring
+        elif isinstance(unit_or_docstring, str):
+            docstring = unit_or_docstring
+        else:
+            assert 0
+        return "<pre>{}</pre>".format(html_escape(docstring))
         #  return convert_rst_to_html(
         #  unit.docstring, unit.module().source_filename)
 
