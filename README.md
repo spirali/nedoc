@@ -1,14 +1,13 @@
 
 # Nedoc (Non-Evaluating Documentation)
 
-* *Nedoc* is generator of API documentation for Python 3
-* *Nedoc* does not run the code of the application/library for which the
-  documentation is generated; *Nedoc* scans its source codes. The
-  application/library and its dependencies does not have to be installed.
-* *Nedoc* tracks what methods was overridden and shows it in the documentation.
-* *Nedoc* supports documentation inheritance of overridden methods.
-* *Nedoc* tracks what and where was reimported.
-* *Nedoc* creates static HTML files as the output.
+*Nedoc* is a generator of API documentation for Python 3 with the following features:
+
+* Your code is not executed; Your program and its dependencies does not have to be installed.
+* Nedoc tracks what methods was overridden and shows it in the documentation.
+* Inheritance of docstrings for overridden methods is supported.
+* Nedoc tracks what and where was reimported.
+* Resulting documentation is a set of static HTML files.
 
 
 ## Examples
@@ -24,7 +23,14 @@ $ pip3 install nedoc
 ```
 
 
-## Getting started
+## Getting started (short version)
+
+```
+python3 -m nedoc init MyProjectName /path/to/project
+python3 -m nedoc build
+```
+
+## Getting starter (longer version)
 
 First, we need to generate `nedoc.conf`; *PathToProject* should lead to toplevel
 directory with Python source codes (i.e. directory containing toplevel
