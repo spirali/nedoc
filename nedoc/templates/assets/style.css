@@ -43,13 +43,7 @@ ul.deflst2 li:nth-child(even) {
   padding: 12px;
 }
 
-a:link.symbol {
-  color: rgb(61, 79, 93);
-  text-decoration: none;
-  font-weight: bold;
-}
-
-a:visited.symbol {
+a:link.symbol, a:visited.symbol {
   color: rgb(77, 100, 117);
   text-decoration: none;
   font-weight: bold;
@@ -65,21 +59,12 @@ a:visited.symbol {
   padding: 0.2em;
 }
 
-.tree a:link {
+.tree a:link, .tree a:visited {
   color: white;
   text-decoration: none;
 }
 
-.tree a:visited {
-  color: white;
-  text-decoration: none;
-}
-
-.select a:visited {
-  color: rgb(61, 79, 93);
-}
-
-.select a:link {
+.select a:visited, .select a:link {
   color: rgb(61, 79, 93);
 }
 
@@ -91,11 +76,7 @@ a:visited.symbol {
   margin-right: 1em;
 }
 
-.selectimp a:visited {
-  color: rgb(61, 79, 93);
-}
-
-.selectimp a:link {
+.selectimp a:visited, .selectimp a:link {
   color: rgb(61, 79, 93);
 }
 
@@ -111,19 +92,13 @@ a {
 }
 
 .decl {
-  /*background-color: rgb(61, 79, 93);*/
   background-color: #ddd;
   padding: 0.5em 1em 0.5em 1em;
   margin-bottom: 0.5em;
-  /*color: white;*/
   border-radius: 5px;
 }
 
-a:link.sourcelink {
-  color: black;
-}
-
-a:visited.sourcelink {
+a:link.sourcelink, a:visited.sourcelink {
   color: black;
 }
 
@@ -135,16 +110,11 @@ a:visited.sourcelink {
   padding-left: 2em;
 }
 
-/*.args {
-  font-style: italic;
-}*/
-
 .label {
   background-color: rgb(77, 100, 117);
   color: white;
   border-radius: 2px;
   padding: 0.3em 0.5em 0.3em 0.5em;
-  /*font-variant: small-caps;*/
   font-family:FreeSans,Arimo,"Droid Sans",Helvetica,Arial,sans-serif;
 }
 
