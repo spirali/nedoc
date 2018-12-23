@@ -130,6 +130,17 @@ class MyClass(BaseClass, another.AnotherClass):
     def abs_method(self, z):
         pass
 
+    @decorator1
+    @decorator2
+    @decorator3
+    @decorator4
+    @decorator5
+    @decorator6
+    @decorator7
+    @decorator8
+    def many_decorators():
+        pass
+
 @attr.s
 class MyClass2(AnotherClass2):
     pass

@@ -6,9 +6,13 @@
 % if unit.overrides:
 <span class="label">override</span> \
 % endif
-% for decorator in unit.decorators:
-<span class="label">@${decorator}</span> \
- %endfor
+% if len(unit.decorators) < 3:
+    % for decorator in unit.decorators:
+    <span class="label">@${decorator}</span> \
+    %endfor
+% else:
+    <span class="label">${len(unit.decorators)} decorators</span> \
+% endif
 </%def>
 
 
