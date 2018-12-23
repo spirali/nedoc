@@ -42,6 +42,8 @@ def construct_function(atok, node):
         text = atok.get_text(d)
         if "abstractmethod" in text:
             unit.abstract_method = True
+        if text and text[0] == "@":
+            text = text[1:]
         unit.decorators.append(text)
     return unit
 
@@ -52,7 +54,10 @@ def construct_class(atok, node):
     unit = Class(node.name, node.lineno, bases)
     construct_unit_body(atok, node, unit)
     for d in node.decorator_list:
-        unit.decorators.append(atok.get_text(d))
+        text = atok.get_text(d)
+        if text and text[0] == "@":
+            text = text[1:]
+        unit.decorators.append(text)
     return unit
 
 
