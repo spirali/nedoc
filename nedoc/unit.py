@@ -223,6 +223,7 @@ class Function(Unit):
         self.args = args
         self.overrides = None
         self.overriden_by = []
+        self.decorators = []
         self.static_method = False
         self.class_method = False
         self.abstract_method = False
@@ -267,6 +268,7 @@ class Class(Unit):
         self.name = name
         self.bases = bases
         self.subclasses = []
+        self.decorators = []
 
     def traverse_super(self, gctx):
         for base in self.bases:

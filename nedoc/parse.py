@@ -39,9 +39,10 @@ def construct_function(atok, node):
         if isinstance(d, ast.Name) and d.id == "classmethod":
             unit.class_method = True
 
-        if "abstractmethod" in atok.get_text(d):
+        text = atok.get_text(d)
+        if "abstractmethod" in text:
             unit.abstract_method = True
-
+        unit.decorators.append(text)
     return unit
 
 
@@ -50,6 +51,8 @@ def construct_class(atok, node):
     bases = [construct_cname(n) for n in node.bases]
     unit = Class(node.name, node.lineno, bases)
     construct_unit_body(atok, node, unit)
+    for d in node.decorator_list:
+        unit.decorators.append(atok.get_text(d))
     return unit
 
 

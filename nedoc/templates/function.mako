@@ -3,18 +3,12 @@
 
 
 <%def name="function_labels(unit)">\
-% if unit.static_method:
-<span class="label">static method</span>\
-% endif
-% if unit.class_method:
-<span class="label">class method</span>\
-% endif
-% if unit.abstract_method:
-<span class="label">abstract method</span>\
-% endif
 % if unit.overrides:
-<span class="label">override</span>\
+<span class="label">override</span> \
 % endif
+% for decorator in unit.decorators:
+<span class="label">@${decorator}</span> \
+ %endfor
 </%def>
 
 
@@ -47,19 +41,26 @@
     %>
     <h3>Declaration</h3>
     <div class="decl">
+    <div class="def">
+    %if unit.decorators:
+        <i>
+        % for decorator in unit.decorators:
+        @${decorator}<br/>
+        % endfor
+        </i>
+    %endif
     %if len(unit.args) <= 1:
-        <div class="def"><span class="kw">def</span> ${unit.name}(<span class="args">${unit.render_args(**arg_style) | n}</span>):
+        <span class="kw">def</span> ${unit.name}(<span class="args">${unit.render_args(**arg_style) | n}</span>):
             <div class="idnt">${link_to_source(unit, "source code")}</div>
-        </div>
     %else:
-        <div class="def"><span class="kw">def</span> ${unit.name}(
+        <span class="kw">def</span> ${unit.name}(
         % for arg in unit.args:
         <div class="args" style="padding-left: 2em">${arg.render(**arg_style) | n}${"," if not loop.last else ""}</div>
         % endfor
         ):
         <div class="idnt">${link_to_source(unit, "source code")}</div>
-        </div>
     %endif
+    </div>
     </div>
 
     % if unit.overrides:

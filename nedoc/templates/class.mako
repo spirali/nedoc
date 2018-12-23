@@ -1,5 +1,5 @@
 <%namespace file="utils.mako" import="symbol_link, link_to_source, link_to_unit"/>
-<%namespace file="function.mako" import="function_desc, function_labels"/>
+<%namespace file="function.mako" import="function_desc"/>
 <%inherit file="base.mako" />
 
 ## Header
@@ -11,6 +11,13 @@
 ## Declaration
 <h2>Declaration</h2>
 <div class="decl">
+%if unit.decorators:
+    <i>
+    % for decorator in unit.decorators:
+    @${decorator}<br/>
+    % endfor
+    </i>
+%endif
 <span class="kw">class</span> ${unit.name}\
 %if unit.bases:
 (\

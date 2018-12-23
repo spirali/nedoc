@@ -130,6 +130,7 @@ class MyClass(BaseClass, another.AnotherClass):
     def abs_method(self, z):
         pass
 
+@attr.s
 class MyClass2(AnotherClass2):
     pass
 
