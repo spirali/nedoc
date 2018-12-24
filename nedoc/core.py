@@ -5,7 +5,7 @@ import tqdm
 
 from .unit import Module, Class
 from .parse import construct_module, parse_path
-from .render import Renderer, write_output
+from .render import Renderer, write_output, link_to
 
 import multiprocessing
 
@@ -100,8 +100,22 @@ class Core:
 
     def copy_assets(self):
         source = os.path.join(os.path.dirname(__file__), "templates", "assets")
-        distutils.dir_util.copy_tree(
-            source, os.path.join(self.gctx.config.target_path, "assets"))
+        target = os.path.join(self.gctx.config.target_path, "assets")
+        logging.debug("Copying assets from '%s' to '%s'", source, target)
+        distutils.dir_util.copy_tree(source, target)
+
+    def make_index(self):
+        index = os.path.join(self.gctx.config.target_path, "index.html")
+        if os.path.isdir(index):
+            raise Exception("Trying to create '{}', but it already exists"
+                            " and it is directory".format(index))
+        if os.path.isfile(index):
+            logging.debug("Removing old index.html")
+            os.unlink(index)
+        module = self.gctx.toplevel_modules()[0]
+        target = link_to(module)
+        logging.debug("Creating symlink '%s' -> '%s'", index, target)
+        os.symlink(target, index)
 
     def render(self):
         self.copy_assets()
@@ -133,3 +147,5 @@ class Core:
 
             for unit in tqdm.tqdm(writes, desc="writesrc", total=len(modules)):
                 pass
+
+        self.make_index()
