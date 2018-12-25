@@ -32,7 +32,7 @@
             %endif
         % endif
         </div>
-    <div class="fdetail">
+    <div class="fdetail" id="fn_${unit.name}">
     ${function_detail(unit)}
     </div>
 </%def>

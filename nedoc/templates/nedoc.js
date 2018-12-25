@@ -19,7 +19,13 @@ $(function() {
         event.preventDefault();
         var elem = $(this);
         var parent = elem.closest(".fn");
-        //parent.children(".fshort").toggle(200);
         parent.children(".fdetail").toggle(200);
     })
+
+    if(window.location.hash) {
+        var name = window.location.hash.slice(1);
+        var elem = $("#fn_" + name);
+        elem.toggle(0);
+        elem.parent().parent().css("backgroundColor", "#e9f6ff");
+    }
 });
