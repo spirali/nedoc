@@ -53,7 +53,6 @@ else:
        #    imp = "<span class='import'>[imported]</span> "
        #else:
        #    imp = ""
-       imp = ""
        if child == unit:
            cls = "selectimp" if uc.imported else "select"
        else:
@@ -63,7 +62,13 @@ else:
     % if cls:
     <div class="${cls}">
     % endif
-    <a href=${ctx.link_to(child)}>${marker | n} <i>${imp | n}${child.keyword}</i> ${child.name}</a>\
+    <%
+       if child.keyword:
+          keyword = "<i>{}</i> ".format(child.keyword)
+       else:
+          keyword = ""
+    %>
+    <a href=${ctx.link_to(child)}>${marker | n} ${keyword | n}${child.name}</a>\
     % if cls:
     </div>
     %endif
