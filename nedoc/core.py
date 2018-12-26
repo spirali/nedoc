@@ -6,6 +6,7 @@ import tqdm
 from .unit import Module, Class
 from .parse import construct_module, parse_path
 from .render import Renderer, write_output, link_to
+from .version import VERSION
 
 import multiprocessing
 
@@ -16,6 +17,7 @@ class GlobalContext:
         self.config = config
         self.modules = {}
         self.top_level_names = []
+        self.nedoc_version = VERSION
 
     def get_module(self, cname):
         return self.modules.get(cname)

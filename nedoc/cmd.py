@@ -1,5 +1,6 @@
 import argparse
 from . import config, core
+from . import version
 
 import os
 import sys
@@ -9,10 +10,12 @@ import logging
 def parse_args():
     parser = argparse.ArgumentParser(
         "nedoc", description='Python documentation generator')
+    parser.add_argument('--version',
+                        action='version',
+                        version='%(prog)s {}'.format(version.VERSION))
     ps = parser.add_subparsers(help="Command", dest="command")
     p = ps.add_parser("build")
     p.add_argument("--debug", default=False, action="store_true")
-
 
     p = ps.add_parser("init")
     p.add_argument("project_name")
