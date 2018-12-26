@@ -1,7 +1,6 @@
 <%namespace file="utils.mako" import="link_to_unit, link_to_source, symbol_link"/>
 <%inherit file="base.mako" />
 
-
 <%def name="function_labels(unit)">\
 % if unit.overrides:
 <span class="label">override</span> \
@@ -14,8 +13,6 @@
     <span class="label">${len(unit.decorators)} decorators</span> \
 % endif
 </%def>
-
-
 
 <%def name="function_desc(unit)">
     <div class="fn"><a id="${unit.name}"></a>
@@ -32,8 +29,9 @@
             %endif
         % endif
         </div>
-    <div class="fdetail" id="fn_${unit.name}">
-    ${function_detail(unit)}
+        <div class="fdetail" id="fn_${unit.name}">
+            ${function_detail(unit)}
+        </div>
     </div>
 </%def>
 
@@ -108,4 +106,3 @@
     </ul>
     %endif
 </%def>
-

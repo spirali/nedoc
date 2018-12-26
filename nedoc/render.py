@@ -155,6 +155,6 @@ class Renderer:
 def write_output(conf):
     path, output, minimize = conf
     if minimize:
-        output = htmlmin.minify(output, remove_empty_space=True)
+        output = htmlmin.minify(output, remove_empty_space=True, remove_comments=True)
     with open(path, "w") as f:
         f.write(output)

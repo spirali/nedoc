@@ -6,7 +6,9 @@
 <h1>Module ${unit.name}</h1>
 <div id="path">${link_to_unit(unit)}</div>
 
+% if unit.docline:
 <p>${unit.docline}</p>
+% endif
 
 ${link_to_source(unit)}
 
@@ -46,7 +48,9 @@ ${link_to_source(unit)}
 <h2>Classes</h2>
 <ul class="deflst">
 % for c in unit.classes(public=True):
-    <li><div><span class="def">class <a class="symbol" href="${ctx.link_to(c)}">${c.name}</a></span>
+    <li>\
+    <div>\
+        <span class="def">class <a class="symbol" href="${ctx.link_to(c)}">${c.name}</a></span>\
     </div>\
     % if c.docline:
         <div class="docline">${c.docline}</div>\
@@ -63,7 +67,9 @@ ${link_to_source(unit)}
 <h2>Re-exported Classes</h2>
 <ul class="deflst">
 % for name, c in classes:
-    <li><div><span class="def">class <a class="symbol" href="${ctx.link_to(c)}">${name}</a></span>
+    <li>\
+    <div>\
+        <span class="def">class <a class="symbol" href="${ctx.link_to(c)}">${name}</a></span>\
     </div>\
     % if c.docline:
         <div class="docline">${c.docline}</div>\
