@@ -1,10 +1,14 @@
 import configparser
 import os.path
+import logging
 
 
 def create_config_file(config_path, project_name, source_path):
     template = """
-# nedoc configuration file
+#
+# Nedoc configuration file
+#
+
 [main]
 project_name = {project_name}
 project_version = 1.0
@@ -12,7 +16,14 @@ project_version = 1.0
 source_path = {source_path}
 target_path = ./html
 
+# Minimize the resulting HTML files
 minimize_output = True
+
+# --- Extra options -----------------------------------------------
+
+# copy_init_docstring = False
+# Use __init__ method docstring for class when it does have its own
+
 """.format(project_name=project_name, source_path=source_path)
 
     with open(config_path, "w") as f:
@@ -24,6 +35,7 @@ def parse_config(config_path):
     config_dir = os.path.dirname(config_path)
 
     parser = configparser.ConfigParser()
+    logging.debug("Reading configuration from %s", config_path)
     with open(config_path) as f:
         parser.read_file(f)
     main = parser["main"]
@@ -39,7 +51,10 @@ def parse_config(config_path):
 
 
 def load_bool(section, key, default=True):
-    value = section.get(key, "true" if default else "false").strip().lower()
+    value = section.get(key)
+    if value is None:
+        return default
+    value = value.strip().lower()
     if value not in ("true", "false"):
         raise Exception("{} expects boolean value: True/False".format(key))
     return value == "true"
