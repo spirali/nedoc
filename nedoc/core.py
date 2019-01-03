@@ -37,6 +37,10 @@ class GlobalContext:
             yield from module.traverse()
 
 
+class NedocException(Exception):
+    pass
+
+
 class Core:
 
     def __init__(self, config):
@@ -71,13 +75,20 @@ class Core:
 
     def build_modules(self):
         config = self.gctx.config
-        source_path = os.path.dirname(config.source_path)
+
+        if not os.path.isdir(config.source_path):
+            raise NedocException("Source path '{}' is not a directory".format(config.source_path))
+
         paths = self.scan_directories()
+
+        if not paths:
+            raise NedocException("No Python files found in '{}'".format(config.source_path))
 
         if not os.path.isdir(config.target_path):
             logging.info("Creating directory %s", config.target_path)
             os.makedirs(config.target_path)
 
+        source_path = os.path.dirname(config.source_path)
         fullpaths = (os.path.join(source_path, path) for path in paths)
         #  processed = (parse_path(p) for p in fullpaths)
         pool = multiprocessing.Pool()
@@ -114,7 +125,9 @@ class Core:
         if os.path.isfile(index):
             logging.debug("Removing old index.html")
             os.unlink(index)
-        module = self.gctx.toplevel_modules()[0]
+
+        modules = self.gctx.toplevel_modules()
+        module = modules[0]
         target = link_to(module)
         logging.debug("Creating symlink '%s' -> '%s'", index, target)
         os.symlink(target, index)

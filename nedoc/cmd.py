@@ -27,42 +27,49 @@ def parse_args():
 def main():
     args = parse_args()
 
-    if args.command == "init":
-        path = "./nedoc.conf"
-        if os.path.isfile(path):
-            sys.stderr.write(
-                "Error: Configuration file '{}' already exists\n".format(path))
-            sys.exit(1)
-        if os.path.isdir(path):
-            sys.stderr.write(
-                "Error: Path '{}' is directory\n".format(path))
-            sys.exit(1)
+    logging.basicConfig(
+        format = '%(levelname)s: %(message)s')
 
-        print("Creating nedoc.conf ...")
-        config.create_config_file(
-            "./nedoc.conf", args.project_name, args.source_path)
-
-    if args.command == "build":
-        if args.debug:
-            logging.basicConfig(level=logging.DEBUG)
-            logging.info("Debug mode enabled")
-
-        path = "./nedoc.conf"
-        if not os.path.isfile(path):
-            if os.path.isdir(path):
-                sys.stderr.write("Error: Path '{}' is directory")
-            else:
+    try:
+        if args.command == "init":
+            path = "./nedoc.conf"
+            if os.path.isfile(path):
                 sys.stderr.write(
-                    "Error: Configuration file '{}' was not found\n"
-                    .format(path))
-            sys.exit(1)
+                    "Error: Configuration file '{}' already exists\n".format(path))
+                sys.exit(1)
+            if os.path.isdir(path):
+                sys.stderr.write(
+                    "Error: Path '{}' is directory\n".format(path))
+                sys.exit(1)
 
-        conf = config.parse_config(path)
-        conf.debug = args.debug
+            print("Creating nedoc.conf ...")
+            config.create_config_file(
+                "./nedoc.conf", args.project_name, args.source_path)
 
-        if conf.source_path.endswith("."):
-            sys.stderr.write("Error: Source directory cannot end by '.'\n")
-            sys.exit(1)
+        if args.command == "build":
+            if args.debug:
+                logging.basicConfig(level=logging.DEBUG)
+                logging.info("Debug mode enabled")
 
-        c = core.Core(conf)
-        c.build()
+            path = "./nedoc.conf"
+            if not os.path.isfile(path):
+                if os.path.isdir(path):
+                    sys.stderr.write("Error: Path '{}' is directory")
+                else:
+                    sys.stderr.write(
+                        "Error: Configuration file '{}' was not found\n"
+                        .format(path))
+                sys.exit(1)
+
+            conf = config.parse_config(path)
+            conf.debug = args.debug
+
+            if conf.source_path.endswith("."):
+                sys.stderr.write("Error: Source directory cannot end by '.'\n")
+                sys.exit(1)
+
+            c = core.Core(conf)
+            c.build()
+    except core.NedocException as e:
+        logging.error("%s", str(e))
+        sys.exit(1)
