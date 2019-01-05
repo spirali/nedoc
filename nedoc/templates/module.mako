@@ -12,37 +12,6 @@
 
 ${link_to_source(unit)}
 
-## Submodules
-% if unit.modules(public=True):
-<h2>Submodules</h2>
-<ul class="deflst">
-% for child in unit.modules(public=True):
-    <li><div class="def">Module <a class="symbol" href="${ctx.link_to(child)}">${child.fullname}</a></div>
-        % if child.docline:
-        <div class="docline">${child.docline}</div>
-        % endif
-    </li>
-% endfor
-</ul>
-% endif
-
-## Imported Submodules
-<% modules = unit.imported_modules(gctx, public=True, export=True) %>
-%if modules:
-<h2>Re-exported Submodules</h2>
-<ul class="deflst">
-% for name, child in modules:
-    <li><div class="def">Module <a class="symbol" href="${ctx.link_to(child)}">${name}</a></div>
-        % if child.docline:
-        <div class="docline">${child.docline}</div>
-        % endif
-        <div class="import"> [${child.fullname}]</div>
-    </li>
-% endfor
-</ul>
-% endif
-
-
 ## Classes
 % if unit.classes(public=True):
 <h2>Classes</h2>
@@ -104,6 +73,36 @@ ${link_to_source(unit)}
         <div class="docline">${u.docline}</div>
     % endif
         <div class="import"> [${u.fullname}]</div>
+    </li>
+% endfor
+</ul>
+% endif
+
+## Submodules
+% if unit.modules(public=True):
+<h2>Submodules</h2>
+<ul class="deflst">
+% for child in unit.modules(public=True):
+    <li><div class="def">Module <a class="symbol" href="${ctx.link_to(child)}">${child.fullname}</a></div>
+        % if child.docline:
+        <div class="docline">${child.docline}</div>
+        % endif
+    </li>
+% endfor
+</ul>
+% endif
+
+## Imported Submodules
+<% modules = unit.imported_modules(gctx, public=True, export=True) %>
+%if modules:
+<h2>Re-exported Submodules</h2>
+<ul class="deflst">
+% for name, child in modules:
+    <li><div class="def">Module <a class="symbol" href="${ctx.link_to(child)}">${name}</a></div>
+        % if child.docline:
+        <div class="docline">${child.docline}</div>
+        % endif
+        <div class="import"> [${child.fullname}]</div>
     </li>
 % endfor
 </ul>
