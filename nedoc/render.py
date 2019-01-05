@@ -13,7 +13,7 @@ from .unit import Module, Function, Class, UnitChild, Unit
 
 def link_to(unit):
     if isinstance(unit, Function):
-        return unit.parent.fullname + ".html#" + unit.name
+        return unit.parent.fullname + ".html#f_" + unit.name
     else:
         return unit.fullname + ".html"
 

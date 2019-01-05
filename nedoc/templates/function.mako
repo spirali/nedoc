@@ -15,7 +15,7 @@
 </%def>
 
 <%def name="function_desc(unit)">
-    <div class="fn"><a id="${unit.name}"></a>
+    <div class="fn"><a id="f_${unit.name}"></a>
         <div class="fshort">
         <span class="def">def <a class="fexpand symbol" href="${ctx.link_to(unit)}">${unit.name}</a>(<span class="args">${unit.render_args()}</span>)
         ${function_labels(unit)}

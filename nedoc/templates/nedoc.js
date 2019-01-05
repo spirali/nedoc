@@ -23,7 +23,7 @@ $(function() {
     })
 
     if(window.location.hash) {
-        var name = window.location.hash.slice(1);
+        var name = window.location.hash.slice(3); // remove #f_ prefix
         var elem = $("#fn_" + name);
         elem.toggle(0);
         elem.parent().parent().css("backgroundColor", "#e9f6ff");
