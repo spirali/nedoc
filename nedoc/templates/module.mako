@@ -31,7 +31,7 @@ ${link_to_source(unit)}
 
 
 ## Imported classes
-<% classes = unit.imported_classes(gctx, public=True, export=True) %>
+<% classes = sorted(unit.imported_classes(gctx, public=True, export=True)) %>
 % if classes:
 <h2>Re-exported Classes</h2>
 <ul class="deflst">
@@ -63,7 +63,7 @@ ${link_to_source(unit)}
 % endif
 
 ## Imported Functions
-<% functions = unit.imported_functions(gctx, public=True, export=True) %>
+<% functions = sorted(unit.imported_functions(gctx, public=True, export=True)) %>
 % if functions:
 <h2>Re-exported Functions</h2>
 <ul class="deflst">
@@ -93,7 +93,7 @@ ${link_to_source(unit)}
 % endif
 
 ## Imported Submodules
-<% modules = unit.imported_modules(gctx, public=True, export=True) %>
+<% modules = sorted(unit.imported_modules(gctx, public=True, export=True)) %>
 %if modules:
 <h2>Re-exported Submodules</h2>
 <ul class="deflst">
