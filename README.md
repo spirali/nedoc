@@ -3,8 +3,8 @@
 
 *Nedoc* is a generator of API documentation for Python 3 with the following features:
 
-* Your code is not executed; Your program and its dependencies does not have to be installed.
-* Nedoc tracks what methods was overridden and shows it in the documentation.
+* Your code is not executed; Your program and its dependencies do not have to be installed.
+* Nedoc tracks which methods were overridden and show it in the documentation.
 * Inheritance of docstrings for overridden methods is supported.
 * Nedoc tracks what and where was reimported.
 * Resulting documentation is a set of static HTML files.
