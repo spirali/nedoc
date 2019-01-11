@@ -1,5 +1,7 @@
 import ast
 import asttokens
+import logging
+
 
 from .unit import Class, Function, Argument
 from .utils import parse_cname
@@ -104,7 +106,12 @@ def construct_module(atok, node, module):
 
 
 def parse_path(fullpath):
-    with open(fullpath) as f:
-        code = f.read()
-    atok = asttokens.ASTTokens(code, parse=True)
-    return atok, code
+    try:
+        with open(fullpath) as f:
+            code = f.read()
+        atok = asttokens.ASTTokens(code, parse=True)
+        return atok, code
+    except Exception as e:
+        message = "Error occured in file '{}': Error: {}".format(fullpath, e)
+        logging.error(message)
+        raise Exception("Parsing failed: {}".format(message))
