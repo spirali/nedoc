@@ -2,6 +2,7 @@ import distutils.dir_util
 import logging
 import multiprocessing
 import os
+import shutil
 
 import tqdm
 
@@ -130,7 +131,13 @@ class Core:
         module = modules[0]
         target = link_to(module)
         logging.debug("Creating symlink '%s' -> '%s'", index, target)
-        os.symlink(target, index)
+        try:
+            os.symlink(target, index)
+        except:
+            logging.warning("Cannot create 'index.html' as symlink, copy is used as fallback")
+            logging.debug("Copying file '{}' as 'index.html'".format(index))
+            target = os.path.join(self.gctx.config.target_path, target)
+            shutil.copyfile(target, index)
 
     def render(self):
         self.copy_assets()
