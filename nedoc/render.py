@@ -13,9 +13,9 @@ from .unit import Module, Function, Class, UnitChild, Unit
 
 def link_to(unit):
     if isinstance(unit, Function):
-        return unit.parent.fullname + ".html#f_" + unit.name
+        return unit.parent.fullname.replace(" ", "_") + ".html#f_" + unit.name
     else:
-        return unit.fullname + ".html"
+        return unit.fullname.replace(" ", "_") + ".html"
 
 
 class RenderContext:
@@ -41,8 +41,10 @@ class RenderContext:
         module = unit.module()
         if module.source_filename is None:
             return None
-        url = "source+{}.html".format(
-            module.source_filename.replace(os.sep, "."))
+        source_filename = module.source_filename
+        source_filename = source_filename.replace(os.sep, ".")
+        source_filename = source_filename.replace(" ", "_")
+        url = "source+{}.html".format(source_filename)
         if unit.lineno is None:
             return url
         else:
