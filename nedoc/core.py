@@ -48,6 +48,7 @@ class Core:
         self.gctx = GlobalContext(config)
 
     def scan_directories(self):
+        ignore_paths = self.gctx.config.ignore_paths
         paths = []
         source_path = self.gctx.config.source_path
         parent_path = os.path.dirname(source_path)
@@ -56,8 +57,14 @@ class Core:
             path = os.path.relpath(root, parent_path)
             for filename in files:
                 if filename.endswith(".py"):
-                    logging.debug("Found filename %s", filename)
-                    paths.append(os.path.join(path, filename))
+                    fpath = os.path.join(path, filename)
+                    for p in ignore_paths:
+                        if fpath.startswith(p):
+                            logging.debug("Found filename %s, ignoring", fpath)
+                            break
+                    else:
+                        logging.debug("Found filename %s", fpath)
+                        paths.append(fpath)
         return paths
 
     def find_or_create_module(self, cname, is_dir, source_filename):
