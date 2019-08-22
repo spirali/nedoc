@@ -149,6 +149,7 @@ a:link.sourcelink, a:visited.sourcelink {
 
 .import {
   font-size: small;
+  color: gray;
 }
 
 .footer {

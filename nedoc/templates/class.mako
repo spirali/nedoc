@@ -36,6 +36,12 @@ ${symbol_link(base)}${"" if loop.last else ", "}\
   class_methods = [u for u in functions if u.is_static()]
 %>
 
+## Documentation
+% if unit.docstring:
+<h2>Documentation</h2>
+${ctx.render_docstring(unit) | n}
+% endif
+
 ## Instance methods
 % if instance_methods:
 <h2>Methods</h2>
@@ -74,12 +80,6 @@ ${link_to_unit(m, True)}${"" if loop.last else ", "}\
 </div>\
 % endfor
 </ul>
-% endif
-
-## Documentation
-% if unit.docstring:
-<h2>Documentation</h2>
-${ctx.render_docstring(unit) | n}
 % endif
 
 ## -- Subclasses
