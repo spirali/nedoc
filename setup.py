@@ -26,6 +26,6 @@ setup(name='nedoc',
       license='MIT',
       packages=["nedoc"],
       provides=["nedoc"],
-      package_data={'nedoc': "nedoc/templates/*"},
+      package_data={'nedoc': ["nedoc/templates/*"]},
       include_package_data=True,
       install_requires=requirements)
