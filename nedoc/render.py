@@ -6,6 +6,7 @@ import htmlmin
 import mako.lookup
 from mako.filters import html_escape
 
+from .rst import convert_rst_to_html
 from .unit import Module, Function, Class, UnitChild, Unit
 
 
@@ -65,10 +66,9 @@ class RenderContext:
         elif isinstance(unit_or_docstring, str):
             docstring = unit_or_docstring
         else:
-            assert 0
-        return "<pre>{}</pre>".format(html_escape(docstring))
-        #  return convert_rst_to_html(
-        #  unit.docstring, unit.module().source_filename)
+            assert False
+        content = convert_rst_to_html(html_escape(docstring))
+        return "<div class='documentation'>{}</div>".format(content)
 
     def render_docline(self, unit):
         return unit.docline

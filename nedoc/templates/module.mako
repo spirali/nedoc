@@ -6,8 +6,8 @@
 <h1>Module ${unit.name}</h1>
 <div id="path">${link_to_unit(unit)}</div>
 
-% if unit.docline:
-<p>${unit.docline}</p>
+% if unit.docstring:
+${ctx.render_docstring(unit) | n}
 % endif
 
 ${link_to_source(unit)}
@@ -106,10 +106,4 @@ ${link_to_source(unit)}
     </li>
 % endfor
 </ul>
-% endif
-
-## Documentation
-% if unit.docstring:
-<h2>Documentation</h2>
-${ctx.render_docstring(unit) | n}
 % endif
