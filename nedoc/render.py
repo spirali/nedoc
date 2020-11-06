@@ -67,8 +67,13 @@ class RenderContext:
             docstring = unit_or_docstring
         else:
             assert False
-        content = convert_rst_to_html(html_escape(docstring))
-        return "<div class='documentation'>{}</div>".format(content)
+
+        escaped = html_escape(docstring)
+        if self.gctx.config.format_rst:
+            content = convert_rst_to_html(escaped)
+            return "<div class='rst-documentation'>{}</div>".format(content)
+        else:
+            return "<pre>{}</pre>".format(escaped)
 
     def render_docline(self, unit):
         return unit.docline
