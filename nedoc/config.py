@@ -25,7 +25,7 @@ minimize_output = True
 # copy_init_docstring = False
 # Use __init__ method docstring for class when it does have its own
 
-# markup = "rst"
+# markup = rst
 # Format docstrings as restructuredText.
 
 # ignore_paths = []
@@ -38,7 +38,7 @@ minimize_output = True
         f.write(template)
 
 
-def parse_config(config_path):
+def parse_config(config_path: str):
     config_path = os.path.abspath(config_path)
     config_dir = os.path.dirname(config_path)
 
@@ -46,7 +46,18 @@ def parse_config(config_path):
     logging.debug("Reading configuration from %s", config_path)
     with open(config_path) as f:
         parser.read_file(f)
+    return parse_config_from_parser(parser, config_dir=config_dir)
+
+
+def parse_config_from_string(config: str):
+    parser = configparser.ConfigParser()
+    parser.read_string(config)
+    return parse_config_from_parser(parser)
+
+
+def parse_config_from_parser(parser: configparser.ConfigParser, config_dir=None):
     main = parser["main"]
+    config_dir = config_dir or os.getcwd()
 
     return Config(
         project_name=main["project_name"],
@@ -61,7 +72,7 @@ def parse_config(config_path):
 
 
 ALLOWED_MARKUP_FORMATS = (
-    "rst"
+    "rst",
 )
 
 
