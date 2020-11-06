@@ -69,7 +69,7 @@ class RenderContext:
             assert False
 
         escaped = html_escape(docstring)
-        if self.gctx.config.format_rst:
+        if self.gctx.config.markup == "rst":
             content = convert_rst_to_html(escaped)
             return "<div class='rst-documentation'>{}</div>".format(content)
         else:
