@@ -25,6 +25,9 @@ minimize_output = True
 # copy_init_docstring = False
 # Use __init__ method docstring for class when it does have its own
 
+# format_rst = False
+# Format docstrings as restructuredText.
+
 # ignore_paths = []
 # Use for ignoring files or directories
 # E.g.: ignore_paths = ["module1/myfile.py", "module2"]
@@ -52,6 +55,7 @@ def parse_config(config_path):
         target_path=os.path.join(config_dir, main["target_path"]),
         minimize_output=load_bool(main, "minimize_output", True),
         copy_init_docstring=load_bool(main, "copy_init_docstring", False),
+        format_rst=load_bool(main, "format_rst", False),
         ignore_paths=load_json(main, "ignore_paths", ())
     )
 
@@ -76,7 +80,7 @@ def load_json(section, key, default=None):
 class Config:
 
     def __init__(self, project_name, project_version, source_path, target_path,
-                 minimize_output=True, copy_init_docstring=False,
+                 minimize_output=True, copy_init_docstring=False, format_rst=False,
                  ignore_paths=(),
                  debug=False):
         self.debug = debug
@@ -91,3 +95,4 @@ class Config:
 
         self.minimize_output = minimize_output
         self.copy_init_docstring = copy_init_docstring
+        self.format_rst = format_rst
