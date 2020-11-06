@@ -25,7 +25,7 @@ minimize_output = True
 # copy_init_docstring = False
 # Use __init__ method docstring for class when it does have its own
 
-# format_rst = False
+# markup = "rst"
 # Format docstrings as restructuredText.
 
 # ignore_paths = []
@@ -55,9 +55,21 @@ def parse_config(config_path):
         target_path=os.path.join(config_dir, main["target_path"]),
         minimize_output=load_bool(main, "minimize_output", True),
         copy_init_docstring=load_bool(main, "copy_init_docstring", False),
-        format_rst=load_bool(main, "format_rst", False),
+        markup=load_markup(main),
         ignore_paths=load_json(main, "ignore_paths", ())
     )
+
+
+ALLOWED_MARKUP_FORMATS = (
+    "rst"
+)
+
+
+def load_markup(section):
+    markup = section.get("markup")
+    if markup is not None and markup not in ALLOWED_MARKUP_FORMATS:
+        raise Exception("markup must be one of {} or None".format(ALLOWED_MARKUP_FORMATS))
+    return markup
 
 
 def load_bool(section, key, default=True):
@@ -80,7 +92,7 @@ def load_json(section, key, default=None):
 class Config:
 
     def __init__(self, project_name, project_version, source_path, target_path,
-                 minimize_output=True, copy_init_docstring=False, format_rst=False,
+                 minimize_output=True, copy_init_docstring=False, markup=None,
                  ignore_paths=(),
                  debug=False):
         self.debug = debug
@@ -95,4 +107,4 @@ class Config:
 
         self.minimize_output = minimize_output
         self.copy_init_docstring = copy_init_docstring
-        self.format_rst = format_rst
+        self.markup = markup
