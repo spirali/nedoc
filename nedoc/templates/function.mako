@@ -41,7 +41,6 @@
         "default_style": ("<i>", "</i>")
     }
     %>
-    <h3>Declaration</h3>
     <div class="decl">
     <div class="def">
     %if unit.decorators:
@@ -70,12 +69,10 @@
     % endif
 
     ## -- Documentation
-    % if unit.docstring:
-        <h3>Documentation</h3>
+    % if unit.docstring and unit.docstring != unit.docline:
         ${ctx.render_docstring(unit) | n}
-    % elif unit.overriden_docstring():
-        <h3>Documentation</h3>
-        <span class="label">inherited documentation</span>
+    % elif unit.overriden_docstring() and unit.overriden_docstring() != unit.overriden_docline():
+        <span class="label">(inherited documentation)</span>
         ${ctx.render_docstring(unit.overriden_docstring()) | n}
     %endif
 
