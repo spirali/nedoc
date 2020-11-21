@@ -1,5 +1,3 @@
-
-
 def parse_cname(name):
     return tuple(name.split("."))
 

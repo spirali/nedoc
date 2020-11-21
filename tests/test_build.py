@@ -22,13 +22,12 @@ def test_project1(project1):
         "myproject/mymodule1/myclass.py",
         "myproject/mymodule1/another.py",
         "myproject/mymodule1/functions.py",
-        "myproject/mymodule1/inheritaceofdoc.py"
+        "myproject/mymodule1/inheritaceofdoc.py",
     }
 
     core.build()
 
-    assert os.path.isfile(
-        str(project1.join("html").join("assets").join("style.css")))
+    assert os.path.isfile(str(project1.join("html").join("assets").join("style.css")))
 
     modules = core.gctx.modules
 

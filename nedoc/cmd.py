@@ -9,10 +9,11 @@ import logging
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        "nedoc", description='Python documentation generator')
-    parser.add_argument('--version',
-                        action='version',
-                        version='%(prog)s {}'.format(version.VERSION))
+        "nedoc", description="Python documentation generator"
+    )
+    parser.add_argument(
+        "--version", action="version", version="%(prog)s {}".format(version.VERSION)
+    )
     ps = parser.add_subparsers(help="Command", dest="command")
     p = ps.add_parser("build")
     p.add_argument("--debug", default=False, action="store_true")
@@ -27,24 +28,24 @@ def parse_args():
 def main():
     args = parse_args()
 
-    logging.basicConfig(
-        format = '%(levelname)s: %(message)s')
+    logging.basicConfig(format="%(levelname)s: %(message)s")
 
     try:
         if args.command == "init":
             path = "./nedoc.conf"
             if os.path.isfile(path):
                 sys.stderr.write(
-                    "Error: Configuration file '{}' already exists\n".format(path))
+                    "Error: Configuration file '{}' already exists\n".format(path)
+                )
                 sys.exit(1)
             if os.path.isdir(path):
-                sys.stderr.write(
-                    "Error: Path '{}' is directory\n".format(path))
+                sys.stderr.write("Error: Path '{}' is directory\n".format(path))
                 sys.exit(1)
 
             print("Creating nedoc.conf ...")
             config.create_config_file(
-                "./nedoc.conf", args.project_name, args.source_path)
+                "./nedoc.conf", args.project_name, args.source_path
+            )
 
         if args.command == "build":
             if args.debug:
@@ -57,8 +58,8 @@ def main():
                     sys.stderr.write("Error: Path '{}' is directory")
                 else:
                     sys.stderr.write(
-                        "Error: Configuration file '{}' was not found\n"
-                        .format(path))
+                        "Error: Configuration file '{}' was not found\n".format(path)
+                    )
                 sys.exit(1)
 
             conf = config.parse_config(path)

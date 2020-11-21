@@ -11,19 +11,29 @@ def with_defaults(text):
     source_path = ./
     target_path = doc
 
-    {}""".format(text)
+    {}""".format(
+        text
+    )
 
 
 def test_parse_rst_markup():
-    config = parse_config_from_string(with_defaults("""
+    config = parse_config_from_string(
+        with_defaults(
+            """
     markup = rst
-    """))
+    """
+        )
+    )
 
     assert config.markup == "rst"
 
 
 def test_nonexistent_markup():
     with pytest.raises(Exception):
-        parse_config_from_string(with_defaults("""
+        parse_config_from_string(
+            with_defaults(
+                """
     markup = foo
-    """))
+    """
+            )
+        )

@@ -1,8 +1,5 @@
-
-
 def is_public_name(name):
-    return not name.startswith("_") or (
-        name.startswith("__") and name.endswith("__"))
+    return not name.startswith("_") or (name.startswith("__") and name.endswith("__"))
 
 
 def get_docline(docstring):
@@ -19,7 +16,6 @@ def get_docline(docstring):
 
 
 class UnitChild:
-
     def __init__(self, name, unit, imported):
         self.name = name
         self.unit = unit
@@ -27,7 +23,6 @@ class UnitChild:
 
 
 class Unit:
-
     def __init__(self, name, lineno):
         self.parent = None
         self.name = name
@@ -56,9 +51,12 @@ class Unit:
         return tuple([p.name for p in self.path])
 
     def filter_childs(self, public=None, cls=None):
-        return [child for child in self.childs
-                if (cls is None or isinstance(child, cls)) and
-                (public is None or public == is_public_name(child.name))]
+        return [
+            child
+            for child in self.childs
+            if (cls is None or isinstance(child, cls))
+            and (public is None or public == is_public_name(child.name))
+        ]
 
     def functions(self, public=None):
         return self.filter_childs(public, Function)
@@ -70,8 +68,7 @@ class Unit:
         return self.filter_childs(public, Class)
 
     def all_units(self, gctx, public=None, cls=None):
-        return [UnitChild(c.name, c, False)
-                for c in self.filter_childs(public, cls)]
+        return [UnitChild(c.name, c, False) for c in self.filter_childs(public, cls)]
 
     def add_child(self, child):
         assert child.parent is None
@@ -143,9 +140,9 @@ class Module(Unit):
                 continue
             unit = gctx.find_by_cname(v)
             if unit is not None:
-                if ((cls is None or isinstance(unit, cls)) and
-                        (public is None or
-                         public == is_public_name(unit.name))):
+                if (cls is None or isinstance(unit, cls)) and (
+                    public is None or public == is_public_name(unit.name)
+                ):
                     result.append(UnitChild(k, unit, True))
         result.sort(key=lambda c: (c.unit.sort_order, c.name))
         return result
@@ -169,7 +166,7 @@ class Module(Unit):
             if cls is not None and not isinstance(unit, cls):
                 continue
             p = unit.path
-            if export and p[:len(path)] != path:
+            if export and p[: len(path)] != path:
                 continue
             result.append((k, unit))
         return result
@@ -192,7 +189,6 @@ class Module(Unit):
 
 
 class Argument:
-
     def __init__(self, name, default):
         self.name = name
         self.default = default
@@ -209,7 +205,8 @@ class Argument:
             return name
         else:
             return "{}={}{}{}".format(
-                name, default_style[0], self.default, default_style[1])
+                name, default_style[0], self.default, default_style[1]
+            )
 
 
 class Function(Unit):

@@ -15,7 +15,8 @@ from nedoc.core import Core  # noqa
 @pytest.fixture()
 def project1(tmpdir):
     p = tmpdir.mkdir("myproject")
-    p.join("__init__.py").write('''
+    p.join("__init__.py").write(
+        '''
 """
 Welcome to the testing project!
 
@@ -26,10 +27,12 @@ This is super nice testing project!
 from .mymodule1.myclass import MyClass
 from myproject.mymodule1.functions import one_arg
 from .mymodule1 import another
-''')
+'''
+    )
 
     m = p.mkdir("mymodule1")
-    m.join("functions.py").write('''
+    m.join("functions.py").write(
+        '''
 """
 This is main funcntion of myproject
 
@@ -75,9 +78,11 @@ def star(x1, x2, *, y1=0):
 def star2(x1, x2, *ags, mm=1, **keywords):
     pass
 
-''')
+'''
+    )
 
-    m.join("myclass.py").write('''
+    m.join("myclass.py").write(
+        '''
 """
 Module containing a class
 
@@ -159,9 +164,11 @@ class MyClass3(AnotherClass3):
 
 class MyClass4(ExternClass):
     pass
-''')
+'''
+    )
 
-    m.join("another.py").write('''
+    m.join("another.py").write(
+        '''
 
 class AnotherClass:
     def overriden_method(self, x, y):
@@ -188,9 +195,11 @@ class NoDocClass:
     def __init__(self):
         """Here is my doc comment"""
         pass
-''')
+'''
+    )
 
-    m.join("inheritaceofdoc.py").write('''
+    m.join("inheritaceofdoc.py").write(
+        '''
 
 class A:
     """Class doc"""
@@ -205,14 +214,17 @@ class B(A):
 class C(B):
     def method(self, x, y):
         pass
-''')
+'''
+    )
 
-    m.join("garbage.txt").write('''
+    m.join("garbage.txt").write(
+        """
 class ThisIsTrap:
     pass
 
 + and + not + parsable +
-''')
+"""
+    )
     return tmpdir
 
 

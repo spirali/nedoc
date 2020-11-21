@@ -12,6 +12,7 @@ from .unit import Module, Function, Class, UnitChild, Unit
 
 #  from .rst import convert_rst_to_html
 
+
 def link_to(unit):
     if isinstance(unit, Function):
         return unit.parent.fullname.replace(" ", "_") + ".html#f_" + unit.name
@@ -20,7 +21,6 @@ def link_to(unit):
 
 
 class RenderContext:
-
     def __init__(self, unit, gctx):
         self.unit = unit
         self.gctx = gctx
@@ -80,14 +80,14 @@ class RenderContext:
 
 
 class Renderer:
-
     def __init__(self, gctx):
         self.gctx = gctx
         paths = [os.path.join(os.path.dirname(__file__), "templates")]
         lookup = mako.lookup.TemplateLookup(
             paths,
-            default_filters=['html_escape'],
-            imports=['from mako.filters import html_escape'])
+            default_filters=["html_escape"],
+            imports=["from mako.filters import html_escape"],
+        )
         self.templates = {}
         self.templates[Module] = lookup.get_template("module.mako")
         self.templates[Function] = lookup.get_template("function.mako")
@@ -98,18 +98,20 @@ class Renderer:
         out = []
         prev = None
         for u in reversed(unit.path):
-            new_result = [(1, uc)
-                          for uc in u.all_units(gctx, public=public)
-                          if uc.unit.role != "function"]
+            new_result = [
+                (1, uc)
+                for uc in u.all_units(gctx, public=public)
+                if uc.unit.role != "function"
+            ]
             new_result.sort(
-                key=lambda t: (t[1].unit.sort_order, t[1].imported, t[1].name))
+                key=lambda t: (t[1].unit.sort_order, t[1].imported, t[1].name)
+            )
             if prev is not None:
                 idx = 0
                 for idx, (level, uc) in enumerate(new_result):
                     if uc.unit == prev:
                         break
-                new_result[idx+1:idx+1] = [(level + 1, uc)
-                                           for (level, uc) in out]
+                new_result[idx + 1 : idx + 1] = [(level + 1, uc) for (level, uc) in out]
             out = new_result
             prev = u
 
@@ -123,22 +125,27 @@ class Renderer:
     def render_unit(self, unit):
         ctx = RenderContext(unit, self.gctx)
         path = os.path.join(self.gctx.config.target_path, ctx.link_to(unit))
-        return (path,
-                self._render(self.templates[type(unit)], ctx, unit),
-                self.gctx.config.minimize_output)
+        return (
+            path,
+            self._render(self.templates[type(unit)], ctx, unit),
+            self.gctx.config.minimize_output,
+        )
 
     def render_source(self, unit):
         ctx = RenderContext(unit, self.gctx)
-        path = os.path.join(
-            self.gctx.config.target_path, ctx.link_to_source(unit))
-        return (path,
-                self._render(self.templates["source"], ctx, unit),
-                self.gctx.config.minimize_output)
+        path = os.path.join(self.gctx.config.target_path, ctx.link_to_source(unit))
+        return (
+            path,
+            self._render(self.templates["source"], ctx, unit),
+            self.gctx.config.minimize_output,
+        )
 
     def render_nedoc_js(self):
-        modules = [(unit.name, unit.parent.fullname, not isinstance(unit, Function))
-                   for unit in self.gctx.get_all_units()
-                   if unit.parent]
+        modules = [
+            (unit.name, unit.parent.fullname, not isinstance(unit, Function))
+            for unit in self.gctx.get_all_units()
+            if unit.parent
+        ]
         modules.sort()
 
         template = os.path.join(os.path.dirname(__file__), "templates/nedoc.js")

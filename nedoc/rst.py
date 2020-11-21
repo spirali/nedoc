@@ -6,6 +6,7 @@ def convert_rst_to_html(text):
         return ""
     content = publish_parts(
         source=text.encode(),
-        writer_name='html5',
-        settings_overrides={'initial_header_level': 3})
-    return content['html_body']
+        writer_name="html5",
+        settings_overrides={"initial_header_level": 3},
+    )
+    return content["html_body"]

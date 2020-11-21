@@ -13,7 +13,6 @@ from .version import VERSION
 
 
 class GlobalContext:
-
     def __init__(self, config):
         self.config = config
         self.modules = {}
@@ -30,8 +29,7 @@ class GlobalContext:
         return module.find_by_cname(cname[1:], self)
 
     def toplevel_modules(self):
-        return [module for cname, module in self.modules.items()
-                if len(cname) == 1]
+        return [module for cname, module in self.modules.items() if len(cname) == 1]
 
     def get_all_units(self):
         for module in self.toplevel_modules():
@@ -43,7 +41,6 @@ class NedocException(Exception):
 
 
 class Core:
-
     def __init__(self, config):
         self.gctx = GlobalContext(config)
 
@@ -85,12 +82,16 @@ class Core:
         config = self.gctx.config
 
         if not os.path.isdir(config.source_path):
-            raise NedocException("Source path '{}' is not a directory".format(config.source_path))
+            raise NedocException(
+                "Source path '{}' is not a directory".format(config.source_path)
+            )
 
         paths = self.scan_directories()
 
         if not paths:
-            raise NedocException("No Python files found in '{}'".format(config.source_path))
+            raise NedocException(
+                "No Python files found in '{}'".format(config.source_path)
+            )
 
         if not os.path.isdir(config.target_path):
             logging.info("Creating directory %s", config.target_path)
@@ -102,7 +103,8 @@ class Core:
         pool = multiprocessing.Pool()
         processed = pool.imap(parse_path, fullpaths)
         for path, (atok, code) in tqdm.tqdm(
-                zip(paths, processed), total=len(paths), desc="parsing"):
+            zip(paths, processed), total=len(paths), desc="parsing"
+        ):
             name_tuple = tuple(path[:-3].split(os.sep))
             is_dir = name_tuple[-1] == "__init__"
             if is_dir:
@@ -128,8 +130,10 @@ class Core:
     def make_index(self):
         index = os.path.join(self.gctx.config.target_path, "index.html")
         if os.path.isdir(index):
-            raise Exception("Trying to create '{}', but it already exists"
-                            " and it is directory".format(index))
+            raise Exception(
+                "Trying to create '{}', but it already exists"
+                " and it is directory".format(index)
+            )
         if os.path.isfile(index):
             logging.debug("Removing old index.html")
             os.unlink(index)
@@ -141,7 +145,9 @@ class Core:
         try:
             os.symlink(target, index)
         except:
-            logging.warning("Cannot create 'index.html' as symlink, copy is used as fallback")
+            logging.warning(
+                "Cannot create 'index.html' as symlink, copy is used as fallback"
+            )
             logging.debug("Copying file '{}' as 'index.html'".format(index))
             target = os.path.join(self.gctx.config.target_path, target)
             shutil.copyfile(target, index)
@@ -151,8 +157,11 @@ class Core:
         renderer = Renderer(self.gctx)
         renderer.render_nedoc_js()
         for root in self.gctx.toplevel_modules():
-            units = [unit for unit in root.traverse()
-                     if isinstance(unit, Class) or isinstance(unit, Module)]
+            units = [
+                unit
+                for unit in root.traverse()
+                if isinstance(unit, Class) or isinstance(unit, Module)
+            ]
 
             pool = multiprocessing.Pool()
 
@@ -165,8 +174,11 @@ class Core:
             for unit in tqdm.tqdm(writes, desc="writedoc", total=len(units)):
                 pass
 
-            modules = [unit for unit in units
-                       if hasattr(unit, "source_code") and unit.source_code]
+            modules = [
+                unit
+                for unit in units
+                if hasattr(unit, "source_code") and unit.source_code
+            ]
 
             renders = (renderer.render_source(unit) for unit in modules)
             if self.gctx.config.debug:

@@ -13,5 +13,3 @@ def test_render_args(project1):
 
     f = fs.local_find("star2")
     assert "x1, x2, *ags, mm=1, **keywords" == f.render_args()
-
-
