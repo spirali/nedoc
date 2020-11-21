@@ -218,9 +218,12 @@ class Function(Unit):
     keyword = "def"
     role = "function"
 
-    def __init__(self, name, lineno, args):
+    def __init__(self, name, lineno, args, kwonlyargs, vararg, kwarg):
         super().__init__(name, lineno)
         self.args = args
+        self.kwonlyargs = kwonlyargs
+        self.vararg = vararg
+        self.kwarg = kwarg
         self.overrides = None
         self.overriden_by = []
         self.decorators = []
@@ -233,7 +236,16 @@ class Function(Unit):
         return isinstance(self.parent, Class)
 
     def render_args(self, **kw):
-        return ", ".join(arg.render(**kw) for arg in self.args)
+        args = [arg.render(**kw) for arg in self.args]
+        if self.vararg:
+            args.append("*" + self.vararg)
+        elif self.kwonlyargs:
+            args.append("*")
+        if self.kwonlyargs:
+            args += [arg.render(**kw) for arg in self.kwonlyargs]
+        if self.kwarg:
+            args.append("**" + self.kwarg)
+        return ", ".join(args)
 
     def overriden_docstring(self):
         if self.docstring:

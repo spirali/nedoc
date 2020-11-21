@@ -28,12 +28,25 @@ def construct_unit_body(atok, node, unit):
 
 def construct_function(atok, node):
     assert isinstance(node, ast.FunctionDef)
+    if node.args.vararg:
+        vararg = node.args.vararg.arg
+    else:
+        vararg = None
+    if node.args.kwarg:
+        kwarg = node.args.kwarg.arg
+    else:
+        kwarg = None
     args = [Argument(a.arg, None) for a in node.args.args]
+    kwonlyargs = [Argument(a.arg, None) for a in node.args.kwonlyargs]
     for a, d in zip(reversed(args), reversed(node.args.defaults)):
         a.default = atok.get_text(d)
         if a.default == "(),":
             a.default = "()"
-    unit = Function(node.name, node.lineno, args)
+    for a, d in zip(reversed(kwonlyargs), reversed(node.args.kw_defaults)):
+        a.default = atok.get_text(d)
+        if a.default == "(),":
+            a.default = "()"
+    unit = Function(node.name, node.lineno, args, kwonlyargs, vararg, kwarg)
     unit.docstring = ast.get_docstring(node)
 
     for d in node.decorator_list:

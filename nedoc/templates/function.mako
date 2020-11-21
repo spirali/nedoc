@@ -56,8 +56,19 @@
     %else:
         <span class="kw">def</span> ${unit.name}(
         % for arg in unit.args:
-        <div class="args" style="padding-left: 2em">${arg.render(**arg_style) | n}${"," if not loop.last else ""}</div>
+        <div class="args" style="padding-left: 2em">${arg.render(**arg_style) | n},</div>
         % endfor
+        % if unit.vararg:
+        <div class="args" style="padding-left: 2em">*${unit.vararg},</div>
+        % elif unit.kwonlyargs:
+        <div class="args" style="padding-left: 2em">*,</div>
+        % endif
+        % for arg in unit.kwonlyargs:
+        <div class="args" style="padding-left: 2em">${arg.render(**arg_style) | n},</div>
+        % endfor
+        % if unit.kwarg:
+        <div class="args" style="padding-left: 2em">**${unit.kwarg},</div>
+        %endif
         ):
         <div class="idnt">${link_to_source(unit, "source code")}</div>
     %endif

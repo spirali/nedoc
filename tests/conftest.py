@@ -68,6 +68,13 @@ def many_args(myarg1,
     This is detailed describtion for super function!
     """
     pass
+
+def star(x1, x2, *, y1=0):
+    pass
+
+def star2(x1, x2, *ags, mm=1, **keywords):
+    pass
+
 ''')
 
     m.join("myclass.py").write('''
