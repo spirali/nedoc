@@ -17,7 +17,11 @@
 <%def name="function_desc(unit)">
     <div class="fn"><a id="f_${unit.name}"></a>
         <div class="fshort">
-        <span class="def">def <a class="fexpand symbol" href="${ctx.link_to(unit)}">${unit.name}</a>(<span class="args">${unit.render_args()}</span>)
+        <%
+           rargs = unit.render_args()
+           rargs = rargs if len(rargs) < 80 else "..."
+        %>
+        <span class="def">def <a class="fexpand symbol" href="${ctx.link_to(unit)}">${unit.name}</a>(<span class="args">${rargs}</span>)
         ${function_labels(unit)}
         </span>
         % if unit.docline:
@@ -50,7 +54,7 @@
         % endfor
         </i>
     %endif
-    %if len(unit.args) <= 1:
+    %if len(unit.args) + len(unit.kwonlyargs) <= 1:
         <span class="kw">def</span> ${unit.name}(<span class="args">${unit.render_args(**arg_style) | n}</span>):
             <div class="idnt">${link_to_source(unit, "source code")}</div>
     %else:
