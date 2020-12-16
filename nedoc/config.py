@@ -32,6 +32,10 @@ minimize_output = True
 # Use for ignoring files or directories
 # E.g.: ignore_paths = ["module1/myfile.py", "module2"]
 
+# create_map_json = True
+# Creates mapping "map.json" that contains mapping between
+# Python identifiers and documentation
+
 """.format(
         project_name=project_name, source_path=source_path
     )
@@ -70,6 +74,7 @@ def parse_config_from_parser(parser: configparser.ConfigParser, config_dir=None)
         copy_init_docstring=load_bool(main, "copy_init_docstring", False),
         markup=load_markup(main),
         ignore_paths=load_json(main, "ignore_paths", ()),
+        create_map_json=load_bool(main, "create_map_json", False),
     )
 
 
@@ -114,6 +119,7 @@ class Config:
         markup=None,
         ignore_paths=(),
         debug=False,
+        create_map_json=False,
     ):
         self.debug = debug
         self.project_name = project_name
@@ -128,3 +134,4 @@ class Config:
         self.minimize_output = minimize_output
         self.copy_init_docstring = copy_init_docstring
         self.markup = markup
+        self.create_map_json = create_map_json

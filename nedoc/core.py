@@ -190,3 +190,6 @@ class Core:
                 pass
 
         self.make_index()
+
+        if self.gctx.config.create_map_json:
+            renderer.render_map_json()

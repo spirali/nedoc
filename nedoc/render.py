@@ -156,6 +156,12 @@ class Renderer:
         with open(path, "w") as f:
             f.write(content.replace("%MODULES%", json.dumps(modules)))
 
+    def render_map_json(self):
+        path = os.path.abspath(os.path.join(self.gctx.config.target_path, "map.json"))
+        units = {unit.fullname: link_to(unit) for unit in self.gctx.get_all_units()}
+        with open(path, "w") as f:
+            f.write(json.dumps(units))
+
     def _render(self, template, ctx, unit):
         return template.render(
             gctx=self.gctx,
