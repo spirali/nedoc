@@ -1,13 +1,15 @@
 <%inherit file="base.mako" />
 <%namespace file="utils.mako" import="symbol_link, link_to_source, link_to_unit"/>
 <%namespace file="function.mako" import="function_desc"/>
+<%namespace file="docstring.mako" import="render_docstring, render_docline"/>
 
 ## Header
 <h1>Module ${unit.name}</h1>
 <div id="path">${link_to_unit(unit)}</div>
 
 % if unit.docstring:
-${ctx.render_docstring(unit) | n}
+${render_docline(ctx, unit)}
+${render_docstring(ctx, unit)}
 % endif
 
 ${link_to_source(unit)}
@@ -21,9 +23,7 @@ ${link_to_source(unit)}
     <div>\
         <span class="def">class <a class="symbol" href="${ctx.link_to(c)}">${c.name}</a></span>\
     </div>\
-    % if c.docline:
-        <div class="docline">${c.docline}</div>\
-    % endif
+    ${render_docline(ctx, c)}
     </li>
 % endfor
 </ul>
@@ -40,9 +40,7 @@ ${link_to_source(unit)}
     <div>\
         <span class="def">class <a class="symbol" href="${ctx.link_to(c)}">${name}</a></span>\
     </div>\
-    % if c.docline:
-        <div class="docline">${c.docline}</div>\
-    % endif
+    ${render_docline(ctx, c)}
     <div class="import"> [${c.fullname}]</div>\
     </li>
 % endfor
@@ -69,10 +67,8 @@ ${link_to_source(unit)}
 <ul class="deflst">
 % for name, u in functions:
     <li><div><span class="def">def <a class="symbol" href="${ctx.link_to(u)}">${name}</a>(<span class="args">${u.render_args()}</span>)</span></div>
-    % if u.docline:
-        <div class="docline">${u.docline}</div>
-    % endif
-        <div class="import"> [${u.fullname}]</div>
+    ${render_docline(ctx, u)}
+    <div class="import"> [${u.fullname}]</div>
     </li>
 % endfor
 </ul>
@@ -84,9 +80,7 @@ ${link_to_source(unit)}
 <ul class="deflst">
 % for child in unit.modules(public=True):
     <li><div class="def">Module <a class="symbol" href="${ctx.link_to(child)}">${child.fullname}</a></div>
-        % if child.docline:
-        <div class="docline">${child.docline}</div>
-        % endif
+    ${render_docline(ctx, child)}
     </li>
 % endfor
 </ul>
@@ -99,9 +93,7 @@ ${link_to_source(unit)}
 <ul class="deflst">
 % for name, child in modules:
     <li><div class="def">Module <a class="symbol" href="${ctx.link_to(child)}">${name}</a></div>
-        % if child.docline:
-        <div class="docline">${child.docline}</div>
-        % endif
+        ${render_docline(ctx, child)}
         <div class="import"> [${child.fullname}]</div>
     </li>
 % endfor

@@ -1,12 +1,14 @@
 <%namespace file="utils.mako" import="symbol_link, link_to_source, link_to_unit"/>
 <%namespace file="function.mako" import="function_desc"/>
+<%namespace file="docstring.mako" import="render_docstring, render_docline"/>
+
 <%inherit file="base.mako" />
 
 ## Header
 <h1>Class ${unit.name}</h1>
 <div id="path">${link_to_unit(unit)}</div>
 
-<p>${unit.docline}</p>
+<p>${render_docline(ctx, unit)}</p>
 
 ## Declaration
 <h2>Declaration</h2>
@@ -26,9 +28,9 @@ ${symbol_link(base)}${"" if loop.last else ", "}\
 % endfor
 )\
 %endif
-:
-<div class="idnt">${link_to_source(unit, "source code")}</div>
 </div>
+
+${link_to_source(unit)}
 
 <%
   functions = unit.functions(public=True)
@@ -39,7 +41,7 @@ ${symbol_link(base)}${"" if loop.last else ", "}\
 ## Documentation
 % if unit.docstring:
 <h2>Documentation</h2>
-${ctx.render_docstring(unit) | n}
+${render_docstring(ctx, unit)}
 % endif
 
 ## Instance methods

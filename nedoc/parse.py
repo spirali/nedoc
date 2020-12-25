@@ -18,7 +18,7 @@ def construct_cname(node):
 
 
 def construct_unit_body(atok, node, unit):
-    unit.docstring = ast.get_docstring(node)
+    unit._docstring = ast.get_docstring(node)
     for child in ast.iter_child_nodes(node):
         if isinstance(child, ast.FunctionDef):
             unit.add_child(construct_function(atok, child))
@@ -47,7 +47,7 @@ def construct_function(atok, node):
         if a.default == "(),":
             a.default = "()"
     unit = Function(node.name, node.lineno, args, kwonlyargs, vararg, kwarg)
-    unit.docstring = ast.get_docstring(node)
+    unit._docstring = ast.get_docstring(node)
 
     for d in node.decorator_list:
         if isinstance(d, ast.Name) and d.id == "staticmethod":

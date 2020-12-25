@@ -1,4 +1,5 @@
 <%namespace file="utils.mako" import="link_to_unit, link_to_source, symbol_link"/>
+<%namespace file="docstring.mako" import="render_docstring, render_docline"/>
 <%inherit file="base.mako" />
 
 <%def name="function_labels(unit)">\
@@ -19,77 +20,74 @@
         <div class="fshort">
         <%
            rargs = unit.render_args()
-           rargs = rargs if len(rargs) < 80 else "..."
+           long_args = len(rargs) >= 80
+           if long_args:
+               rargs = "..."
         %>
-        <span class="def">def <a class="fexpand symbol" href="${ctx.link_to(unit)}">${unit.name}</a>(<span class="args">${rargs}</span>)
+        <span class="def">def <a class="fexpand ${"symbol" if unit.docstring else "symbol-no-doc"}" href="${ctx.link_to(unit)}">${unit.name}</a>(<span class="args">${rargs}</span>)
         ${function_labels(unit)}
         </span>
-        % if unit.docline:
-            <div class="docline">${unit.docline}</div>
-        % else:
-            <% docline = unit.overriden_docline() %>
-            % if docline:
-                <div class="docline"><span class="label">inherited doc</span> ${docline}</div>
-            %endif
-        % endif
+        ${render_docline(ctx, unit, True)}
         </div>
         <div class="fdetail" id="fn_${unit.name}">
-            ${function_detail(unit)}
+            ${function_detail(unit, long_args)}
         </div>
     </div>
 </%def>
 
-<%def name="function_detail(unit)">
+<%def name="function_detail(unit, long_args)">
     <% arg_style = {
         "self_style": ("<span class='kw'>", "</span>"),
         "default_style": ("<i>", "</i>")
     }
     %>
-    <div class="decl">
-    <div class="def">
-    %if unit.decorators:
-        <i>
-        % for decorator in unit.decorators:
-        @${decorator}<br/>
-        % endfor
-        </i>
-    %endif
-    %if len(unit.args) + len(unit.kwonlyargs) <= 1:
-        <span class="kw">def</span> ${unit.name}(<span class="args">${unit.render_args(**arg_style) | n}</span>):
-            <div class="idnt">${link_to_source(unit, "source code")}</div>
-    %else:
-        <span class="kw">def</span> ${unit.name}(
-        % for arg in unit.args:
-        <div class="args" style="padding-left: 2em">${arg.render(**arg_style) | n},</div>
-        % endfor
-        % if unit.vararg:
-        <div class="args" style="padding-left: 2em">*${unit.vararg},</div>
-        % elif unit.kwonlyargs:
-        <div class="args" style="padding-left: 2em">*,</div>
-        % endif
-        % for arg in unit.kwonlyargs:
-        <div class="args" style="padding-left: 2em">${arg.render(**arg_style) | n},</div>
-        % endfor
-        % if unit.kwarg:
-        <div class="args" style="padding-left: 2em">**${unit.kwarg},</div>
-        %endif
-        ):
-        <div class="idnt">${link_to_source(unit, "source code")}</div>
-    %endif
-    </div>
-    </div>
+
+    % if long_args:
+        <div class="decl">
+            <div class="def">
+            %if unit.decorators:
+                <i>
+                % for decorator in unit.decorators:
+                @${decorator}<br/>
+                % endfor
+                </i>
+            %endif
+            %if len(unit.args) + len(unit.kwonlyargs) <= 1:
+                <span class="kw">def</span> ${unit.name}(<span class="args">${unit.render_args(**arg_style) | n}</span>)
+            %else:
+                <span class="kw">def</span> ${unit.name}(
+                % for arg in unit.args:
+                <div class="args" style="padding-left: 2em">${arg.render(**arg_style) | n},</div>
+                % endfor
+                % if unit.vararg:
+                <div class="args" style="padding-left: 2em">*${unit.vararg},</div>
+                % elif unit.kwonlyargs:
+                <div class="args" style="padding-left: 2em">*,</div>
+                % endif
+                % for arg in unit.kwonlyargs:
+                <div class="args" style="padding-left: 2em">${arg.render(**arg_style) | n},</div>
+                % endfor
+                % if unit.kwarg:
+                <div class="args" style="padding-left: 2em">**${unit.kwarg},</div>
+                %endif
+                )
+            %endif
+            </div>
+        </div>
+    % endif
+
+    <div class="idnt">${link_to_source(unit)}</div>
 
     % if unit.overrides:
     <p>This method overrides ${link_to_unit(unit.overrides)}.</p>
     % endif
 
     ## -- Documentation
-    % if unit.docstring and unit.docstring != unit.docline:
-        ${ctx.render_docstring(unit) | n}
-    % elif unit.overriden_docstring() and unit.overriden_docstring() != unit.overriden_docline():
-        <span class="label">(inherited documentation)</span>
-        ${ctx.render_docstring(unit.overriden_docstring()) | n}
-    %endif
+    ${render_docstring(ctx, unit)}
+    ##% elif unit.overriden_docstring() and unit.overriden_docstring() != unit.overriden_docline():
+    ##    <span class="label">(inherited documentation)</span>
+    ##    ${ctx.render_docstring(unit.overriden_docstring()) | n}
+    ##%endif
 
     ## -- Overrides
     % if unit.overriden_by:

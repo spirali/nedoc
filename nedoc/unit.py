@@ -2,19 +2,6 @@ def is_public_name(name):
     return not name.startswith("_") or (name.startswith("__") and name.endswith("__"))
 
 
-def get_docline(docstring):
-    if not docstring:
-        return ""
-    lines = docstring.strip().split("\n")
-    result = []
-    for line in lines[:3]:  # max 3 lines
-        line = line.strip()
-        if not line:
-            return " ".join(result)
-        result.append(line)
-    return " ".join(result)
-
-
 class UnitChild:
     def __init__(self, name, unit, imported):
         self.name = name
@@ -27,13 +14,17 @@ class Unit:
         self.parent = None
         self.name = name
         self.lineno = lineno
-        self.docstring = None
+        self._docstring = None
         self.childs = []
         self.aliases = []
 
     @property
-    def docline(self):
-        return get_docline(self.docstring)
+    def has_own_docstring(self):
+        return bool(self._docstring)
+
+    @property
+    def docstring(self):
+        return self._docstring
 
     @property
     def path(self):
@@ -244,14 +235,13 @@ class Function(Unit):
             args.append("**" + self.kwarg)
         return ", ".join(args)
 
-    def overriden_docstring(self):
-        if self.docstring:
-            return self.docstring
+    @property
+    def docstring(self):
+        if self._docstring:
+            return self._docstring
         if self.overrides:
-            return self.overrides.overriden_docstring()
-
-    def overriden_docline(self):
-        return get_docline(self.overriden_docstring())
+            return self.overrides.docstring
+        return None
 
     def finalize(self, gctx):
         super().finalize(gctx)

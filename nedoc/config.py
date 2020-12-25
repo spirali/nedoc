@@ -20,6 +20,7 @@ target_path = ./html
 # Minimize the resulting HTML files
 minimize_output = True
 
+
 # --- Extra options -----------------------------------------------
 
 # copy_init_docstring = False

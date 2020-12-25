@@ -4,3 +4,4 @@ tqdm==4.51.0
 htmlmin==0.1.12
 pygments==2.7.2
 docutils==0.16
+docstring-parser==0.7.3
