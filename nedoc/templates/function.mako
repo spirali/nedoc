@@ -84,10 +84,6 @@
 
     ## -- Documentation
     ${render_docstring(ctx, unit)}
-    ##% elif unit.overriden_docstring() and unit.overriden_docstring() != unit.overriden_docline():
-    ##    <span class="label">(inherited documentation)</span>
-    ##    ${ctx.render_docstring(unit.overriden_docstring()) | n}
-    ##%endif
 
     ## -- Overrides
     % if unit.overriden_by:

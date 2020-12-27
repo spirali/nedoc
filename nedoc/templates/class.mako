@@ -74,7 +74,7 @@ ${render_docstring(ctx, unit)}
 <h2>Inherited methods</h3>
 <ul class="deflst">
 %for u, methods in im:
-<li><div>Methods inherited from ${link_to_unit(unit)}:</div>
+<li><div>Methods inherited from ${link_to_unit(u)}:</div>
 <div>
 % for m in methods:
 ${link_to_unit(m, True)}${"" if loop.last else ", "}\
