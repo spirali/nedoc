@@ -23,8 +23,9 @@
            long_args = len(rargs) >= 80
            if long_args:
                rargs = "..."
+           pd = ctx.get_parsed_docstring(unit)
         %>
-        <span class="def">def <a class="fexpand ${"symbol" if unit.docstring else "symbol-no-doc"}" href="${ctx.link_to(unit)}">${unit.name}</a>(<span class="args">${rargs}</span>)
+        <span class="def">def <a class="fexpand symbol${"" if pd.has_more() else ("-short" if pd.docline else "-no-doc")}" href="${ctx.link_to(unit)}">${unit.name}</a>(<span class="args">${rargs}</span>)
         ${function_labels(unit)}
         </span>
         ${render_docline(ctx, unit, True)}
