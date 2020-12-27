@@ -1,6 +1,6 @@
 import pytest
 
-from nedoc.config import parse_config_from_string
+from nedoc.config import parse_config_from_string, Markup
 
 
 def with_defaults(text):
@@ -25,7 +25,7 @@ def test_parse_rst_markup():
         )
     )
 
-    assert config.markup == "rst"
+    assert config.markup == Markup.RST
 
 
 def test_nonexistent_markup():

@@ -1,12 +1,26 @@
 from mako.filters import html_escape
 from nedoc.rst import convert_rst_to_html
-from .config import Config
+from .config import Config, DocstringStyle
 import docstring_parser
+import typing
+
+STYLE_MAP = {
+    DocstringStyle.NUMPY: docstring_parser.Style.numpydoc,
+    DocstringStyle.RST: docstring_parser.Style.rest,
+    DocstringStyle.GOOGLE: docstring_parser.Style.google,
+}
 
 
 class ParsedDocString:
-
-    def __init__(self, docline, description, params, returns, raises, subsections):
+    def __init__(
+        self,
+        docline: typing.Union[str, None],
+        description: typing.Union[str, None],
+        params=None,
+        returns=None,
+        raises=None,
+        subsections=None,
+    ):
         self.docline = docline
         self.description = description
         self.params = params
@@ -14,25 +28,65 @@ class ParsedDocString:
         self.raises = raises
         self.subsections = subsections
 
-    def has_more(self):
-        return bool(self.description or self.params or self.returns or self.raises or self.subsections)
+    def has_more(self) -> bool:
+        return bool(
+            self.description
+            or self.params
+            or self.returns
+            or self.raises
+            or self.subsections
+        )
 
 
-def parse_docstring(config: Config, docstring: str) -> ParsedDocString:
-    style = docstring_parser.Style.numpydoc
-    dstr = docstring_parser.parse(docstring, style)
+def merge_first_line(docstring: str) -> str:
+    lines = docstring.split("\n")
+    for i, line in enumerate(lines):
+        if not line.strip():
+            break
+    else:
+        if len(lines) > 3:
+            return docstring
+        else:
+            return " ".join(lines)
+    if i > 3:
+        return docstring
+    return " ".join(line.strip() for line in lines[:i]) + "\n" + "\n".join(lines[i:])
 
+
+def parse_docstring(
+    style: DocstringStyle, docstring: typing.Union[str, None]
+) -> ParsedDocString:
+
+    if docstring is None:
+        return ParsedDocString(None, None)
+
+    docstring = merge_first_line(docstring.strip())
+
+    ds_style = STYLE_MAP.get(style)
+    if not ds_style:  # None style
+        lines = docstring.split("\n", 1)
+        if len(lines) == 1:
+            docline = lines[0]
+            description = None
+        else:
+            docline, description = lines
+            description = description.lstrip()
+        return ParsedDocString(docline, description)
+
+    dstr = docstring_parser.parse(docstring, ds_style)
     subsections = [
         (m.args[0].replace("_", " ").capitalize(), m.description)
         for m in dstr.meta
         if len(m.args) == 1 and m.args[0] not in ("param", "returns", "raises")
     ]
-
-    return ParsedDocString(dstr.short_description,
-                           dstr.long_description,
-                           dstr.params,
-                           dstr.returns,
-                           dstr.raises, subsections)
+    return ParsedDocString(
+        dstr.short_description,
+        dstr.long_description,
+        dstr.params,
+        dstr.returns,
+        dstr.raises,
+        subsections,
+    )
 
 
 def get_simple_docline(docstring):

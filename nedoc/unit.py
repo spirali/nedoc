@@ -314,4 +314,4 @@ class Class(Unit):
             fns = self.functions()
             init = [f for f in fns if f.name == "__init__"]
             if init and init[0].docstring:
-                self.docstring = init[0].docstring
+                self._docstring = init[0].docstring

@@ -2,6 +2,7 @@ import configparser
 import os.path
 import logging
 import json
+from enum import Enum
 
 
 def create_config_file(config_path, project_name, source_path):
@@ -73,22 +74,25 @@ def parse_config_from_parser(parser: configparser.ConfigParser, config_dir=None)
         target_path=os.path.join(config_dir, main["target_path"]),
         minimize_output=load_bool(main, "minimize_output", True),
         copy_init_docstring=load_bool(main, "copy_init_docstring", False),
-        markup=load_markup(main),
+        markup=load_enum(main, "markup", Markup, Markup.NONE),
+        style=load_enum(main, "style", DocstringStyle, DocstringStyle.NONE),
         ignore_paths=load_json(main, "ignore_paths", ()),
         create_map_json=load_bool(main, "create_map_json", False),
     )
 
 
-ALLOWED_MARKUP_FORMATS = ("rst",)
-
-
-def load_markup(section):
-    markup = section.get("markup")
-    if markup is not None and markup not in ALLOWED_MARKUP_FORMATS:
+def load_enum(section, name, enum_type, default):
+    value = section.get(name)
+    if value is None:
+        return default
+    try:
+        return enum_type(value)
+    except ValueError:
         raise Exception(
-            "markup must be one of {} or None".format(ALLOWED_MARKUP_FORMATS)
+            "{} have to be one of: {}".format(
+                name, ", ".join(v.value for v in enum_type)
+            )
         )
-    return markup
 
 
 def load_bool(section, key, default=True):
@@ -108,6 +112,20 @@ def load_json(section, key, default=None):
     return json.loads(value)
 
 
+class DocstringStyle(Enum):
+
+    NONE = "none"
+    NUMPY = "numpy"
+    RST = "rst"
+    GOOGLE = "google"
+
+
+class Markup(Enum):
+
+    NONE = "none"
+    RST = "rst"
+
+
 class Config:
     def __init__(
         self,
@@ -117,7 +135,8 @@ class Config:
         target_path,
         minimize_output=True,
         copy_init_docstring=False,
-        markup=None,
+        style: DocstringStyle = DocstringStyle.NONE,
+        markup: Markup = Markup.NONE,
         ignore_paths=(),
         debug=False,
         create_map_json=False,
@@ -128,6 +147,7 @@ class Config:
         self.source_path = source_path
         self.target_path = target_path
         self.ignore_paths = ignore_paths
+        self.style = style
 
         if self.source_path.endswith(os.sep):
             self.source_path = self.source_path[:-1]

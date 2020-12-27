@@ -6,6 +6,7 @@ import htmlmin
 import mako.lookup
 from mako.filters import html_escape
 
+from .config import Markup
 from .docstring import parse_docstring
 from .rst import convert_rst_to_html
 from .unit import Module, Function, Class, UnitChild, Unit
@@ -61,25 +62,8 @@ class RenderContext:
         lexer = lexers.get_lexer_by_name("python")
         return highlight(code, lexer, formatter)
 
-    """
-    def render_docstring(self, unit_or_docstring):
-        if isinstance(unit_or_docstring, Unit):
-            docstring = unit_or_docstring.docstring
-        elif isinstance(unit_or_docstring, str):
-            docstring = unit_or_docstring
-        else:
-            assert False
-
-        escaped = html_escape(docstring)
-        if self.gctx.config.markup == "rst":
-            content = convert_rst_to_html(escaped)
-            return "<div class='rst-documentation'>{}</div>".format(content)
-        else:
-            return "<pre>{}</pre>".format(escaped)
-    """
-
     def render_paragraph(self, text):
-        if self.gctx.config.markup == "rst":
+        if self.gctx.config.markup == Markup.RST:
             content = convert_rst_to_html(text)
             return "<div class='rst-documentation'>{}</div>".format(content)
         else:
@@ -87,7 +71,7 @@ class RenderContext:
             return "<pre>{}</pre>".format(escaped)
 
     def get_parsed_docstring(self, unit):
-        return parse_docstring(self.gctx.config, unit.docstring)
+        return parse_docstring(self.gctx.config.style, unit.docstring)
 
     def render_docline(self, unit):
         return unit.docline

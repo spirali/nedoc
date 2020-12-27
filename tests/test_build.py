@@ -15,6 +15,7 @@ def test_project1(project1):
     create_config_file(conf_path, "Project1", "myproject")
 
     conf = parse_config(conf_path)
+    conf.debug = True
 
     core = Core(conf)
     assert set(core.scan_directories()) == {
@@ -85,7 +86,7 @@ def test_project1(project1):
     m = modules[("myproject", "mymodule1", "inheritaceofdoc")]
     c = m.local_find("C")
     mt = c.local_find("method")
-    assert mt.overriden_docline() == "Method doc"
+    assert mt.docstring == "Method doc"
 
 
 def test_copy_init_docstring_enabled(project1):
