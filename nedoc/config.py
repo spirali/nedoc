@@ -18,6 +18,12 @@ project_version = 1.0
 source_path = {source_path}
 target_path = ./html
 
+# Style of docstrings, possible values: none, numpy, google, rst
+style = none
+
+# Markup in docstrings, possible values: none, rst
+markup = none
+
 # Minimize the resulting HTML files
 minimize_output = True
 
@@ -26,9 +32,6 @@ minimize_output = True
 
 # copy_init_docstring = False
 # Use __init__ method docstring for class when it does have its own
-
-# markup = rst
-# Format docstrings as restructuredText.
 
 # ignore_paths = []
 # Use for ignoring files or directories
