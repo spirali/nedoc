@@ -26,6 +26,12 @@ def construct_unit_body(atok, node, unit):
             unit.add_child(construct_class(atok, child))
 
 
+def get_type_annotation(atok, annotation):
+    if annotation is None:
+        return None
+    return atok.get_text(annotation)
+
+
 def construct_function(atok, node):
     assert isinstance(node, ast.FunctionDef)
     if node.args.vararg:
@@ -36,8 +42,8 @@ def construct_function(atok, node):
         kwarg = node.args.kwarg.arg
     else:
         kwarg = None
-    args = [Argument(a.arg, None) for a in node.args.args]
-    kwonlyargs = [Argument(a.arg, None) for a in node.args.kwonlyargs]
+    args = [Argument(a.arg, None, get_type_annotation(atok, a.annotation)) for a in node.args.args]
+    kwonlyargs = [Argument(a.arg, None, get_type_annotation(atok, a.annotation)) for a in node.args.kwonlyargs]
     for a, d in zip(reversed(args), reversed(node.args.defaults)):
         a.default = atok.get_text(d)
         if a.default == "(),":
@@ -46,7 +52,7 @@ def construct_function(atok, node):
         a.default = atok.get_text(d)
         if a.default == "(),":
             a.default = "()"
-    unit = Function(node.name, node.lineno, args, kwonlyargs, vararg, kwarg)
+    unit = Function(node.name, node.lineno, args, kwonlyargs, vararg, kwarg, get_type_annotation(atok, node.returns))
     unit._docstring = ast.get_docstring(node)
 
     for d in node.decorator_list:

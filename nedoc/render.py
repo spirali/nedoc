@@ -73,9 +73,6 @@ class RenderContext:
     def get_parsed_docstring(self, unit):
         return parse_docstring(self.gctx.config.style, unit.docstring)
 
-    def render_docline(self, unit):
-        return unit.docline
-
 
 class Renderer:
     def __init__(self, gctx):

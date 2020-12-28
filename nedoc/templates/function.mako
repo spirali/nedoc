@@ -19,13 +19,13 @@
     <div class="fn"><a id="f_${unit.name}"></a>
         <div class="fshort">
         <%
-           rargs = unit.render_args()
-           long_args = len(rargs) >= 80
-           if long_args:
-               rargs = "..."
+           limit = 80
+           if unit.returns:
+                limit -= len(unit.returns) + 4
+           long_args, rargs = unit.render_args(limit=limit)
            pd = ctx.get_parsed_docstring(unit)
         %>
-        <span class="def">def <a class="fexpand symbol${"" if pd.has_more() else ("-short" if pd.docline else "-no-doc")}" href="${ctx.link_to(unit)}">${unit.name}</a>(<span class="args">${rargs}</span>)
+        <span class="def">def <a class="fexpand symbol${"" if pd.has_more() else ("-short" if pd.docline else "-no-doc")}" href="${ctx.link_to(unit)}">${unit.name}</a>(<span class="args">${rargs}</span>)${" -> " + unit.returns if unit.returns else ""}
         ${function_labels(unit)}
         </span>
         ${render_docline(ctx, unit, True)}
@@ -43,7 +43,7 @@
     }
     %>
 
-    % if long_args:
+    % if long_args or unit.decorators:
         <div class="decl">
             <div class="def">
             %if unit.decorators:
@@ -54,7 +54,7 @@
                 </i>
             %endif
             %if len(unit.args) + len(unit.kwonlyargs) <= 1:
-                <span class="kw">def</span> ${unit.name}(<span class="args">${unit.render_args(**arg_style) | n}</span>)
+                <span class="kw">def</span> ${unit.name}(<span class="args">${unit.render_args(limit=None, **arg_style) | n}</span>)
             %else:
                 <span class="kw">def</span> ${unit.name}(
                 % for arg in unit.args:
@@ -71,7 +71,7 @@
                 % if unit.kwarg:
                 <div class="args" style="padding-left: 2em">**${unit.kwarg},</div>
                 %endif
-                )
+                )${" -> " + unit.returns if unit.returns else ""}
             %endif
             </div>
         </div>

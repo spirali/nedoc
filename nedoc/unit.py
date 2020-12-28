@@ -1,3 +1,6 @@
+from nedoc.utils import join_upto_limit
+
+
 def is_public_name(name):
     return not name.startswith("_") or (name.startswith("__") and name.endswith("__"))
 
@@ -180,9 +183,10 @@ class Module(Unit):
 
 
 class Argument:
-    def __init__(self, name, default):
+    def __init__(self, name, default=None, annotation=None):
         self.name = name
         self.default = default
+        self.annotation = annotation
 
     def __repr__(self):
         return "<Arg name={}>".format(self.name)
@@ -192,12 +196,21 @@ class Argument:
             name = "{}self{}".format(*self_style)
         else:
             name = self.name
-        if self.default is None:
-            return name
+
+        if self.annotation:
+            if self.default:
+                return "{}: {} = {}{}{}".format(
+                    name, self.annotation, default_style[0], self.default, default_style[1]
+                )
+            else:
+                return "{}: {}".format(name, self.annotation)
         else:
-            return "{}={}{}{}".format(
-                name, default_style[0], self.default, default_style[1]
-            )
+            if self.default is None:
+                return name
+            else:
+                return "{}={}{}{}".format(
+                    name, default_style[0], self.default, default_style[1]
+                )
 
 
 class Function(Unit):
@@ -206,12 +219,13 @@ class Function(Unit):
     keyword = "def"
     role = "function"
 
-    def __init__(self, name, lineno, args, kwonlyargs, vararg, kwarg):
+    def __init__(self, name, lineno, args, kwonlyargs, vararg, kwarg, returns):
         super().__init__(name, lineno)
         self.args = args
         self.kwonlyargs = kwonlyargs
         self.vararg = vararg
         self.kwarg = kwarg
+        self.returns = returns
         self.overrides = None
         self.overriden_by = []
         self.decorators = []
@@ -223,7 +237,7 @@ class Function(Unit):
     def is_method(self):
         return isinstance(self.parent, Class)
 
-    def render_args(self, **kw):
+    def render_args(self, limit=None, **kw):
         args = [arg.render(**kw) for arg in self.args]
         if self.vararg:
             args.append("*" + self.vararg)
@@ -233,7 +247,10 @@ class Function(Unit):
             args += [arg.render(**kw) for arg in self.kwonlyargs]
         if self.kwarg:
             args.append("**" + self.kwarg)
-        return ", ".join(args)
+        if limit is not None:
+            return join_upto_limit(args, ", ", limit)
+        else:
+            return ", ".join(args)
 
     @property
     def docstring(self):
