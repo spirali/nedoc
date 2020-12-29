@@ -23,9 +23,12 @@
            if unit.returns:
                 limit -= len(unit.returns) + 4
            long_args, rargs = unit.render_args(limit=limit)
-           pd = ctx.get_parsed_docstring(unit)
+           has_more = long_args | bool(unit.overriden_by) | bool(unit.aliases)
+           if not has_more:
+                pd = ctx.get_parsed_docstring(unit)
+                has_more = pd.has_more()
         %>
-        <span class="def">def <a class="fexpand symbol${"" if pd.has_more() else ("-short" if pd.docline else "-no-doc")}" href="${ctx.link_to(unit)}">${unit.name}</a>(<span class="args">${rargs}</span>)${" -> " + unit.returns if unit.returns else ""}
+        <span class="def"><span class="ftoggle${"" if has_more else "-empty"}">${"&#9654;" if has_more else "&#9655;" | n}</span> def <a class="fexpand symbol${"" if unit.docstring else "-no-doc"}" href="${ctx.link_to(unit)}">${unit.name}</a>(<span class="args">${rargs}</span>)${" -> " + unit.returns if unit.returns else ""}
         ${function_labels(unit)}
         </span>
         ${render_docline(ctx, unit, True)}

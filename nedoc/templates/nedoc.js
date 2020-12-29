@@ -19,7 +19,19 @@ $(function() {
         event.preventDefault();
         var elem = $(this);
         var parent = elem.closest(".fn");
-        parent.children(".fdetail").toggle(200);
+        var fdetail = parent.children(".fdetail");
+        fdetail.toggle(200, "swing", function() {
+            var is_visible = fdetail.is(':visible');
+            var toggle = elem.parent().children(".ftoggle");
+            var toggle2 = elem.parent().children(".ftoggle-empty");
+            if (is_visible) {
+                toggle.html("&#9660;");
+                toggle2.html("&#9661;");
+            } else {
+                toggle.html("&#9654;");
+                toggle2.html("&#9655;");
+            }
+        });
     })
 
     if(window.location.hash) {
