@@ -1,9 +1,9 @@
 import ast
-import asttokens
 import logging
 
+import asttokens
 
-from .unit import Class, Function, Argument
+from .unit import Argument, Class, Function
 from .utils import parse_cname
 
 
@@ -30,7 +30,7 @@ def get_type_annotation(atok, annotation):
     if annotation is None:
         return None
     text = atok.get_text(annotation)
-    if text.startswith("\"") and text.endswith("\""):
+    if text.startswith('"') and text.endswith('"'):
         return text[1:-1]
     return text
 
@@ -45,8 +45,14 @@ def construct_function(atok, node):
         kwarg = node.args.kwarg.arg
     else:
         kwarg = None
-    args = [Argument(a.arg, None, get_type_annotation(atok, a.annotation)) for a in node.args.args]
-    kwonlyargs = [Argument(a.arg, None, get_type_annotation(atok, a.annotation)) for a in node.args.kwonlyargs]
+    args = [
+        Argument(a.arg, None, get_type_annotation(atok, a.annotation))
+        for a in node.args.args
+    ]
+    kwonlyargs = [
+        Argument(a.arg, None, get_type_annotation(atok, a.annotation))
+        for a in node.args.kwonlyargs
+    ]
     for a, d in zip(reversed(args), reversed(node.args.defaults)):
         a.default = atok.get_text(d)
         if a.default == "(),":
@@ -55,7 +61,15 @@ def construct_function(atok, node):
         a.default = atok.get_text(d)
         if a.default == "(),":
             a.default = "()"
-    unit = Function(node.name, node.lineno, args, kwonlyargs, vararg, kwarg, get_type_annotation(atok, node.returns))
+    unit = Function(
+        node.name,
+        node.lineno,
+        args,
+        kwonlyargs,
+        vararg,
+        kwarg,
+        get_type_annotation(atok, node.returns),
+    )
     unit._docstring = ast.get_docstring(node)
 
     for d in node.decorator_list:

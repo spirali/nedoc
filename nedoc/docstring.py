@@ -1,8 +1,8 @@
-from mako.filters import html_escape
-from nedoc.rst import convert_rst_to_html
-from .config import Config, DocstringStyle
-import docstring_parser
 import typing
+
+import docstring_parser
+
+from .config import DocstringStyle
 
 STYLE_MAP = {
     DocstringStyle.NUMPY: docstring_parser.Style.numpydoc,

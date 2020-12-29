@@ -200,7 +200,11 @@ class Argument:
         if self.annotation:
             if self.default:
                 return "{}: {} = {}{}{}".format(
-                    name, self.annotation, default_style[0], self.default, default_style[1]
+                    name,
+                    self.annotation,
+                    default_style[0],
+                    self.default,
+                    default_style[1],
                 )
             else:
                 return "{}: {}".format(name, self.annotation)

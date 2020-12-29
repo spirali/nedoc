@@ -1,6 +1,7 @@
+import pytest
+
 from nedoc.config import DocstringStyle
 from nedoc.docstring import merge_first_line, parse_docstring
-import pytest
 
 
 def test_merge_first_list():

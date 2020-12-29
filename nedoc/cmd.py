@@ -1,10 +1,9 @@
 import argparse
-from . import config, core
-from . import version
-
+import logging
 import os
 import sys
-import logging
+
+from . import config, core, version
 
 
 def parse_args():

@@ -1,7 +1,7 @@
 import configparser
-import os.path
-import logging
 import json
+import logging
+import os.path
 from enum import Enum
 
 

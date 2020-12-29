@@ -1,6 +1,6 @@
 import pytest
 
-from nedoc.config import parse_config_from_string, Markup
+from nedoc.config import Markup, parse_config_from_string
 
 
 def with_defaults(text):

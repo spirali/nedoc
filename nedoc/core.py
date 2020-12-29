@@ -144,7 +144,7 @@ class Core:
         logging.debug("Creating symlink '%s' -> '%s'", index, target)
         try:
             os.symlink(target, index)
-        except:
+        except NotImplementedError:
             logging.warning(
                 "Cannot create 'index.html' as symlink, copy is used as fallback"
             )

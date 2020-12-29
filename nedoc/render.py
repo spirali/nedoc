@@ -9,8 +9,7 @@ from mako.filters import html_escape
 from .config import Markup
 from .docstring import parse_docstring
 from .rst import convert_rst_to_html
-from .unit import Module, Function, Class, UnitChild, Unit
-
+from .unit import Class, Function, Module, UnitChild
 
 #  from .rst import convert_rst_to_html
 
@@ -54,9 +53,8 @@ class RenderContext:
             return "{}#line-{}".format(url, unit.lineno - 1)
 
     def format_code(self, code):
+        from pygments import highlight, lexers
         from pygments.formatters import HtmlFormatter
-        from pygments import lexers
-        from pygments import highlight
 
         formatter = HtmlFormatter(linenos=True, lineanchors="line")
         lexer = lexers.get_lexer_by_name("python")
