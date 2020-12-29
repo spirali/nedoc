@@ -29,7 +29,10 @@ def construct_unit_body(atok, node, unit):
 def get_type_annotation(atok, annotation):
     if annotation is None:
         return None
-    return atok.get_text(annotation)
+    text = atok.get_text(annotation)
+    if text.startswith("\"") and text.endswith("\""):
+        return text[1:-1]
+    return text
 
 
 def construct_function(atok, node):

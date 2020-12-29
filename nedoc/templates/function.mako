@@ -23,7 +23,7 @@
            if unit.returns:
                 limit -= len(unit.returns) + 4
            long_args, rargs = unit.render_args(limit=limit)
-           has_more = long_args | bool(unit.overriden_by) | bool(unit.aliases)
+           has_more = long_args | bool(unit.overriden_by) | bool(unit.aliases) | bool(unit.overrides)
            if not has_more:
                 pd = ctx.get_parsed_docstring(unit)
                 has_more = pd.has_more()
