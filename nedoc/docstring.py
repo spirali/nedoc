@@ -5,9 +5,9 @@ import docstring_parser
 from .config import DocstringStyle
 
 STYLE_MAP = {
-    DocstringStyle.NUMPY: docstring_parser.Style.numpydoc,
-    DocstringStyle.RST: docstring_parser.Style.rest,
-    DocstringStyle.GOOGLE: docstring_parser.Style.google,
+    DocstringStyle.NUMPY: docstring_parser.DocstringStyle.NUMPYDOC,
+    DocstringStyle.RST: docstring_parser.DocstringStyle.REST,
+    DocstringStyle.GOOGLE: docstring_parser.DocstringStyle.GOOGLE,
 }
 
 
