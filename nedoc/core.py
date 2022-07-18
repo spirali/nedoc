@@ -125,7 +125,7 @@ class Core:
         source = os.path.join(os.path.dirname(__file__), "templates", "assets")
         target = os.path.join(self.gctx.config.target_path, "assets")
         logging.debug("Copying assets from '%s' to '%s'", source, target)
-        distutils.dir_util.copy_tree(source, target)
+        shutil.copytree(source, target)
 
     def make_index(self):
         index = os.path.join(self.gctx.config.target_path, "index.html")
