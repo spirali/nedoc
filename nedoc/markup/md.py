@@ -37,9 +37,13 @@ class NedocRenderer(marko.HTMLRenderer):
         if link.startswith("."):
             link = link[1:]
 
-        parent: Unit = self.unit.parent
+        # Try to resolve the link in the same unit
+        item = self.unit.local_find(link)
+        if item is not None:
+            return self.render_intradoc_link(target=item, element=element)
 
         # Try to resolve the link in the same module
+        parent: Unit = self.unit.parent
         item = parent.local_find(link)
         if item is not None:
             return self.render_intradoc_link(target=item, element=element)
@@ -79,7 +83,9 @@ def is_intradoc_link(element: Link) -> bool:
     return True
 
 
-def convert_markdown_to_html(ctx: GlobalContext, unit: Unit, text: Optional[str]) -> str:
+def convert_markdown_to_html(
+    ctx: GlobalContext, unit: Unit, text: Optional[str]
+) -> str:
     if text is None:
         return ""
 

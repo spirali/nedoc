@@ -51,7 +51,7 @@ class BuiltProject:
         Finds a unit by a dotted path (`a.b.c`).
         """
         if path == ".":
-            cname = (".", )
+            cname = (".",)
         else:
             cname = tuple(path.split("."))
         return self.core.gctx.find_by_cname(cname)

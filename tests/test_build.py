@@ -1,11 +1,11 @@
 import os
 
-from .conftest import load_project
-
 from nedoc.config import create_config_file, parse_config
 from nedoc.core import Core
 from nedoc.unit import Function
 from nedoc.utils import parse_cname
+
+from .conftest import load_project
 
 
 def test_project1(project1):
