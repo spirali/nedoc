@@ -6,7 +6,7 @@ from marko.inline import CodeSpan, Link
 
 from ..core import GlobalContext
 from ..render import link_to
-from ..unit import Unit
+from ..unit import Module, Unit
 
 
 def dotted_to_cname(path: str) -> Tuple[str, ...]:
@@ -24,6 +24,13 @@ class NedocRenderer(marko.HTMLRenderer):
             return super().render_link(element)
 
         link = element.dest.strip()
+
+        if link == ".":
+            if isinstance(self.unit, Module):
+                target = self.unit
+            else:
+                target = self.unit.parent
+            return self.render_intradoc_link(target=target, element=element)
 
         # First try to resolve the link as an absolute path
         if not link.startswith("."):
