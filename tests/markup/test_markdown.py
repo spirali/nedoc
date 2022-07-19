@@ -239,3 +239,49 @@ class Foo:
     result = pb.build()
     x = result.markdown("a.foo.Foo")
     assert x == '<p><a href="a.foo.Foo.html#f_fn"><code>bar</code></a></p>\n'
+
+
+def test_markdown_link_prefer_local_over_module_without_dot(tmp_path):
+    pb = ProjectBuilder(tmp_path)
+    pb.file(
+        "a/foo.py",
+        '''
+class Foo:
+    """
+    [`bar`](Bar)
+    """
+
+    def Bar(self):
+        pass
+
+
+class Bar:
+    pass
+''',
+    )
+    result = pb.build()
+    x = result.markdown("a.foo.Foo")
+    assert x == '<p><a href="a.foo.Foo.html#f_Bar"><code>bar</code></a></p>\n'
+
+
+def test_markdown_link_prefer_module_over_local_with_dot(tmp_path):
+    pb = ProjectBuilder(tmp_path)
+    pb.file(
+        "a/foo.py",
+        '''
+class Foo:
+    """
+    [`bar`](.Bar)
+    """
+
+    def Bar(self):
+        pass
+
+
+class Bar:
+    pass
+''',
+    )
+    result = pb.build()
+    x = result.markdown("a.foo.Foo")
+    assert x == '<p><a href="a.foo.Bar.html"><code>bar</code></a></p>\n'

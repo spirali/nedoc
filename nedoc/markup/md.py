@@ -32,15 +32,15 @@ class NedocRenderer(marko.HTMLRenderer):
             if item is not None:
                 return self.render_intradoc_link(target=item, element=element)
 
+            # Try to resolve the link in the same unit
+            item = self.unit.local_find(link)
+            if item is not None:
+                return self.render_intradoc_link(target=item, element=element)
+
         # Then try to resolve the link as a relative path
         # Strip leading dot
         if link.startswith("."):
             link = link[1:]
-
-        # Try to resolve the link in the same unit
-        item = self.unit.local_find(link)
-        if item is not None:
-            return self.render_intradoc_link(target=item, element=element)
 
         # Try to resolve the link in the same module
         parent: Unit = self.unit.parent
