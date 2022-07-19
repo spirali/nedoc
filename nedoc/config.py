@@ -21,7 +21,7 @@ target_path = ./html
 # Style of docstrings, possible values: none, numpy, google, rst
 style = none
 
-# Markup in docstrings, possible values: none, rst
+# Markup in docstrings, possible values: none, rst, markdown
 markup = none
 
 # Minimize the resulting HTML files
@@ -127,6 +127,7 @@ class Markup(Enum):
 
     NONE = "none"
     RST = "rst"
+    MARKDOWN = "markdown"
 
 
 class Config:

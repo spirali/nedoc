@@ -1,4 +1,4 @@
-from nedoc.rst import convert_rst_to_html
+from nedoc.markup.rst import convert_rst_to_html
 
 
 def test_rst_convert():
