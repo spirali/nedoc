@@ -159,6 +159,53 @@ class Bar:
     assert x == '<p><a href="a.bar.Bar.html"><code>Bar</code></a></p>\n'
 
 
+def test_markdown_link_module(tmp_path):
+    pb = ProjectBuilder(tmp_path)
+    pb.file(
+        "a/foo.py",
+        '''
+class Foo:
+    """
+    [`bar`](a.foo)
+    """
+''',
+    )
+    result = pb.build()
+    x = result.markdown("a.foo.Foo")
+    assert x == '<p><a href="a.foo.html"><code>bar</code></a></p>\n'
+
+
+def test_markdown_link_current_module(tmp_path):
+    pb = ProjectBuilder(tmp_path)
+    pb.file(
+        "a/foo.py",
+        '''
+class Foo:
+    """
+    [`bar`](.)
+    """
+''',
+    )
+    result = pb.build()
+    x = result.markdown("a.foo.Foo")
+    assert x == '<p><a href="a.foo.html"><code>bar</code></a></p>\n'
+
+
+def test_markdown_link_current_module_in_module(tmp_path):
+    pb = ProjectBuilder(tmp_path)
+    pb.file(
+        "a/foo.py",
+        '''
+"""
+[`bar`](.)
+"""
+''',
+    )
+    result = pb.build()
+    x = result.markdown("a.foo")
+    assert x == '<p><a href="a.foo.html"><code>bar</code></a></p>\n'
+
+
 def test_markdown_link_class(tmp_path):
     pb = ProjectBuilder(tmp_path)
     pb.file(
