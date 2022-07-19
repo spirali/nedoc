@@ -9,6 +9,7 @@
 * Nedoc tracks what and where was reimported.
 * Resulting documentation is a set of static HTML files.
 * Supported docstring styles: numpydoc, google, rst
+* Supported docstring markup: markdown, rst
 
 ## Examples
 
