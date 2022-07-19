@@ -1,4 +1,4 @@
-from conftest import load_project
+from .conftest import load_project
 
 
 def test_render_args(project1):

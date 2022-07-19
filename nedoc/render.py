@@ -8,12 +8,11 @@ from mako.filters import html_escape
 
 from .config import Markup
 from .docstring import parse_docstring
-from .markup.md import convert_markdown_to_html
 from .markup.rst import convert_rst_to_html
-from .unit import Class, Function, Module, UnitChild
+from .unit import Class, Function, Module, Unit, UnitChild
 
 
-def link_to(unit):
+def link_to(unit: Unit) -> str:
     if isinstance(unit, Function):
         return unit.parent.fullname.replace(" ", "_") + ".html#f_" + unit.name
     else:
@@ -21,7 +20,7 @@ def link_to(unit):
 
 
 class RenderContext:
-    def __init__(self, unit, gctx):
+    def __init__(self, unit: Unit, gctx):
         self.unit = unit
         self.gctx = gctx
         self.now = datetime.datetime.now()
@@ -64,7 +63,9 @@ class RenderContext:
             content = convert_rst_to_html(text)
             return "<div class='rst-doc'>{}</div>".format(content)
         if self.gctx.config.markup == Markup.MARKDOWN:
-            content = convert_markdown_to_html(text)
+            from .markup.md import convert_markdown_to_html
+
+            content = convert_markdown_to_html(self.gctx, self.unit, text)
             return "<div class='md-doc'>{}</div>".format(content)
         else:
             escaped = html_escape(text)

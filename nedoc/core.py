@@ -1,4 +1,3 @@
-import distutils.dir_util
 import logging
 import multiprocessing
 import os
