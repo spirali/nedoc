@@ -1,6 +1,6 @@
 import os
 
-from conftest import load_project
+from .conftest import load_project
 
 from nedoc.config import create_config_file, parse_config
 from nedoc.core import Core
