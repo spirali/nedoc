@@ -8,10 +8,9 @@ from mako.filters import html_escape
 
 from .config import Markup
 from .docstring import parse_docstring
-from .rst import convert_rst_to_html
+from .markup.md import convert_markdown_to_html
+from .markup.rst import convert_rst_to_html
 from .unit import Class, Function, Module, UnitChild
-
-#  from .rst import convert_rst_to_html
 
 
 def link_to(unit):
@@ -63,7 +62,10 @@ class RenderContext:
     def render_paragraph(self, text):
         if self.gctx.config.markup == Markup.RST:
             content = convert_rst_to_html(text)
-            return "<div class='rst-documentation'>{}</div>".format(content)
+            return "<div class='rst-doc'>{}</div>".format(content)
+        if self.gctx.config.markup == Markup.MARKDOWN:
+            content = convert_markdown_to_html(text)
+            return "<div class='md-doc'>{}</div>".format(content)
         else:
             escaped = html_escape(text)
             return "<pre>{}</pre>".format(escaped)

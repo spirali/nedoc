@@ -5,3 +5,4 @@ htmlmin==0.1.12
 pygments==2.11.2
 docutils==0.18.1
 docstring-parser==0.13
+markdown>=3.4,<4
