@@ -78,14 +78,13 @@ class RenderContext:
 
 def combine_docstring(docstring: ParsedDocString, unit: Unit) -> ParsedDocString:
     if isinstance(unit, Function):
-        args = {arg.name: arg for arg in unit.args}
+        args = {arg.name: arg for arg in unit.named_args}
         if docstring.params is not None:
             for param in docstring.params:
                 arg = args.get(param.arg_name)
                 if arg is not None:
                     if param.type_name is None and arg.annotation is not None:
                         param.type_name = arg.annotation
-
     return docstring
 
 

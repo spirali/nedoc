@@ -27,12 +27,27 @@ def target(x1, x2, *ags, mm=1, **keywords):
 
 def test_render_docstring_take_argument_type_from_type_hint(tmp_path, snapshot):
     rendered = render_docstring(tmp_path, '''
-def target(a: int):
+def target(a: int, b: str):
     """
     Some documentation.
 
-    :param a: an argument
+    :param a: a first argument
+    :param b: a second argument
     """
     pass
 ''')
-    snapshot.assert_match(rendered, "fn-arg-take-type-hint-0.html")
+    snapshot.assert_match(rendered, "expected.html")
+
+
+def test_render_docstring_take_kwonly_argument_type_from_type_hint(tmp_path, snapshot):
+    rendered = render_docstring(tmp_path, '''
+def target(a: int, *, b: str):
+    """
+    Some documentation.
+
+    :param a: a first argument
+    :param b: a second argument
+    """
+    pass
+''')
+    snapshot.assert_match(rendered, "expected.html")
