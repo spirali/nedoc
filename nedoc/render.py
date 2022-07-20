@@ -7,7 +7,7 @@ import mako.lookup
 from mako.filters import html_escape
 
 from .config import Markup
-from .docstring import parse_docstring
+from .docstring import ParsedDocString, parse_docstring
 from .markup.rst import convert_rst_to_html
 from .unit import Class, Function, Module, Unit, UnitChild
 
@@ -71,24 +71,40 @@ class RenderContext:
             escaped = html_escape(text)
             return "<pre>{}</pre>".format(escaped)
 
-    def get_parsed_docstring(self, unit):
-        return parse_docstring(self.gctx.config.style, unit.docstring)
+    def get_parsed_docstring(self, unit: Unit) -> ParsedDocString:
+        docstring = parse_docstring(self.gctx.config.style, unit.docstring)
+        return combine_docstring(docstring, unit)
+
+
+def combine_docstring(docstring: ParsedDocString, unit: Unit) -> ParsedDocString:
+    if isinstance(unit, Function):
+        args = {arg.name: arg for arg in unit.args}
+        if docstring.params is not None:
+            for param in docstring.params:
+                arg = args.get(param.arg_name)
+                if arg is not None:
+                    if param.type_name is None and arg.annotation is not None:
+                        param.type_name = arg.annotation
+
+    return docstring
+
+
+TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates")
 
 
 class Renderer:
     def __init__(self, gctx):
         self.gctx = gctx
-        paths = [os.path.join(os.path.dirname(__file__), "templates")]
-        lookup = mako.lookup.TemplateLookup(
-            paths,
+        self.lookup = mako.lookup.TemplateLookup(
+            [TEMPLATE_DIR],
             default_filters=["html_escape"],
             imports=["from mako.filters import html_escape"],
         )
         self.templates = {}
-        self.templates[Module] = lookup.get_template("module.mako")
-        self.templates[Function] = lookup.get_template("function.mako")
-        self.templates[Class] = lookup.get_template("class.mako")
-        self.templates["source"] = lookup.get_template("source.mako")
+        self.templates[Module] = self.lookup.get_template("module.mako")
+        self.templates[Function] = self.lookup.get_template("function.mako")
+        self.templates[Class] = self.lookup.get_template("class.mako")
+        self.templates["source"] = self.lookup.get_template("source.mako")
 
     def tree(self, gctx, unit, public=True):
         out = []

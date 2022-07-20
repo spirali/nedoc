@@ -1,3 +1,5 @@
+from typing import List, Optional
+
 from nedoc.utils import join_upto_limit
 
 
@@ -13,7 +15,7 @@ class UnitChild:
 
 
 class Unit:
-    def __init__(self, name, lineno):
+    def __init__(self, name: str, lineno: Optional[int]):
         self.parent = None
         self.name = name
         self.lineno = lineno
@@ -223,7 +225,7 @@ class Function(Unit):
     keyword = "def"
     role = "function"
 
-    def __init__(self, name, lineno, args, kwonlyargs, vararg, kwarg, returns):
+    def __init__(self, name: str, lineno: int, args: List[Argument], kwonlyargs, vararg, kwarg, returns):
         super().__init__(name, lineno)
         self.args = args
         self.kwonlyargs = kwonlyargs

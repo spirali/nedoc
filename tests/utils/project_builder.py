@@ -1,8 +1,10 @@
 from pathlib import Path
+from typing import Tuple
 
-from nedoc.config import create_config_file, parse_config
+from nedoc.config import DocstringStyle, create_config_file, parse_config
 from nedoc.core import Core
 from nedoc.markup.md import convert_markdown_to_html
+from nedoc.render import RenderContext, Renderer
 from nedoc.unit import Unit
 
 
@@ -36,6 +38,7 @@ class ProjectBuilder:
         create_config_file(conf_path, self.name, ".")
         conf = parse_config(conf_path)
         conf.target_path = str(self.root_dir.joinpath("html"))
+        conf.style = DocstringStyle.RST
 
         core = Core(conf)
         core.build_modules()
@@ -62,3 +65,24 @@ class BuiltProject:
         """
         unit = self.get(path)
         return convert_markdown_to_html(self.core.gctx, unit, unit.docstring)
+
+
+def parse_unit(tmpdir: Path, code: str, name="target") -> Unit:
+    return parse_unit_inner(tmpdir, code, name)[1]
+
+
+def parse_unit_inner(tmpdir: Path, code: str, name: str) -> Tuple[BuiltProject, Unit]:
+    pb = ProjectBuilder(tmpdir)
+    pb.file("a/foo.py", code)
+    built = pb.build()
+    return (built, built.get(f"a.foo.{name}"))
+
+
+def render_docstring(tmpdir: Path, code: str, name="target") -> str:
+    built, unit = parse_unit_inner(tmpdir, code, name=name)
+
+    renderer = Renderer(built.core.gctx)
+    template = renderer.lookup.get_template("docstring.mako")
+
+    render_ctx = RenderContext(unit, built.core.gctx)
+    return template.get_def("render_docstring").render(render_ctx, unit)
