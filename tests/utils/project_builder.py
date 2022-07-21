@@ -33,12 +33,17 @@ class ProjectBuilder:
         with open(filepath, "w") as f:
             f.write(content)
 
-    def build(self) -> "BuiltProject":
+    def build(self, **config_args) -> "BuiltProject":
         conf_path = str(self.root_dir.joinpath("nedoc.conf"))
         create_config_file(conf_path, self.name, ".")
         conf = parse_config(conf_path)
         conf.target_path = str(self.root_dir.joinpath("html"))
-        conf.style = DocstringStyle.RST
+
+        args = dict(config_args)
+        if "style" not in args:
+            args["style"] = DocstringStyle.RST
+        for (key, value) in args.items():
+            setattr(conf, key, value)
 
         core = Core(conf)
         core.build_modules()
@@ -67,19 +72,21 @@ class BuiltProject:
         return convert_markdown_to_html(self.core.gctx, unit, unit.docstring)
 
 
-def parse_unit(tmpdir: Path, code: str, name="target") -> Unit:
-    return parse_unit_inner(tmpdir, code, name)[1]
+def parse_unit(tmpdir: Path, code: str, name="target", **config_args) -> Unit:
+    return parse_unit_inner(tmpdir, code, name, **config_args)[1]
 
 
-def parse_unit_inner(tmpdir: Path, code: str, name: str) -> Tuple[BuiltProject, Unit]:
+def parse_unit_inner(
+    tmpdir: Path, code: str, name: str, **config_args
+) -> Tuple[BuiltProject, Unit]:
     pb = ProjectBuilder(tmpdir)
     pb.file("a/foo.py", code)
-    built = pb.build()
+    built = pb.build(**config_args)
     return (built, built.get(f"a.foo.{name}"))
 
 
-def render_docstring(tmpdir: Path, code: str, name="target") -> str:
-    built, unit = parse_unit_inner(tmpdir, code, name=name)
+def render_docstring(tmpdir: Path, code: str, name="target", **config_args) -> str:
+    built, unit = parse_unit_inner(tmpdir, code, name=name, **config_args)
 
     renderer = Renderer(built.core.gctx)
     template = renderer.lookup.get_template("docstring.mako")

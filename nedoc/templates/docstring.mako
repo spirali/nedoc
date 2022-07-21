@@ -19,23 +19,21 @@
         ${render_paragraph(ctx, pd.description)}
     %endif
 
-    % if pd.params:
-        % if unit.role == "function":
+    % if unit.role == "function":
+        % if pd.params:
         <h3>Parameters</h3>
-        % else:
-        <h3>Attributes</h3>
-        %endif
         ${render_list(ctx, pd.params)}
-    % endif
+        % endif
 
-    % if pd.returns:
-    <h3>Returns</h3>
-    ${render_list(ctx, pd.returns)}
-    % endif
+        % if pd.returns:
+        <h3>Returns</h3>
+        ${render_list(ctx, pd.returns)}
+        % endif
 
-    % if pd.raises:
-    <h3>Raises</h3>
-    ${render_list(ctx, pd.raises)}
+        % if pd.raises:
+        <h3>Raises</h3>
+        ${render_list(ctx, pd.raises)}
+        % endif
     % endif
 
     % if pd.subsections:

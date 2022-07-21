@@ -73,10 +73,12 @@ class RenderContext:
 
     def get_parsed_docstring(self, unit: Unit) -> ParsedDocString:
         docstring = parse_docstring(self.gctx.config.style, unit.docstring)
-        return combine_docstring(docstring, unit)
+        return enrich_docstring_with_type_hints(docstring, unit)
 
 
-def combine_docstring(docstring: ParsedDocString, unit: Unit) -> ParsedDocString:
+def enrich_docstring_with_type_hints(
+    docstring: ParsedDocString, unit: Unit
+) -> ParsedDocString:
     if isinstance(unit, Function):
         args = {arg.name: arg for arg in unit.named_args}
         if docstring.params is not None:
