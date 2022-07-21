@@ -1,6 +1,7 @@
 import typing
 
 import docstring_parser
+from docstring_parser import DocstringParam
 
 from .config import DocstringStyle
 
@@ -16,7 +17,7 @@ class ParsedDocString:
         self,
         docline: typing.Union[str, None],
         description: typing.Union[str, None],
-        params=None,
+        params: typing.Optional[typing.List[DocstringParam]] = None,
         returns=None,
         raises=None,
         subsections=None,

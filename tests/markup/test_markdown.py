@@ -26,7 +26,7 @@ paragraph.
     )
 
     result = pb.build()
-    snapshot.assert_match(result.markdown("."), "markdown-0.html")
+    snapshot.assert_match(result.markdown("."), "expected.html")
 
 
 def test_markdown_link_ignore_no_codespan(tmp_path):

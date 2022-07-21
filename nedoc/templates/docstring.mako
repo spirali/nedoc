@@ -61,7 +61,7 @@
 <%def name="render_item(ctx, item)">
     <li>
     % if hasattr(item, "arg_name") and hasattr(item, "type_name"):
-        <strong>${item.arg_name}</strong> : ${item.type_name}
+        <strong>${item.arg_name}</strong>: ${item.type_name}
     % elif hasattr(item, "arg_name"):
         <strong>${item}.arg_name}</strong>
     % elif hasattr(item, "type_name"):
