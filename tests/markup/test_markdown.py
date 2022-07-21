@@ -1,4 +1,5 @@
-from ..utils.project_builder import ProjectBuilder
+from nedoc.config import DocstringStyle, Markup
+from ..utils.project_builder import ProjectBuilder, render_docstring
 
 
 def test_markdown_convert(tmp_path, snapshot):
@@ -347,3 +348,18 @@ def test_markdown_link_missing_parent(tmp_path):
     result = pb.build()
     x = result.markdown("a.foo")
     assert x == '<p><a href="%60...Bar%60">bar</a></p>\n'
+
+
+def test_markdown_in_argument_docstring(tmp_path, snapshot):
+    rendered = render_docstring(tmp_path, '''
+def target(a: int):
+    """
+    Documentation.
+
+    :param a: **Markdown** can be used *here*. Also [links](`bar`).
+    """
+
+def bar():
+    pass
+''', style=DocstringStyle.RST, markup=Markup.MARKDOWN)
+    snapshot.assert_match(rendered, "expected.html")

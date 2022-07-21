@@ -73,7 +73,16 @@ class RenderContext:
 
     def get_parsed_docstring(self, unit: Unit) -> ParsedDocString:
         docstring = parse_docstring(self.gctx.config.style, unit.docstring)
-        return enrich_docstring_with_type_hints(docstring, unit)
+        docstring = enrich_docstring_with_type_hints(docstring, unit)
+        docstring = self.render_markup_in_docstring(docstring)
+        return docstring
+
+    def render_markup_in_docstring(self, docstring: ParsedDocString) -> ParsedDocString:
+        if docstring.params is not None:
+            for param in docstring.params:
+                if param.description is not None:
+                    param.description = self.render_paragraph(param.description)
+        return docstring
 
 
 def enrich_docstring_with_type_hints(
