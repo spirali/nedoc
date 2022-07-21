@@ -8,7 +8,7 @@
         % if not unit.has_own_docstring:
         <span class="label">inherited doc</span>
         % endif
-        ${pd.docline}
+        ${render_markup(ctx, pd.docline)}
         </div>
     % endif
 </%def>
@@ -16,7 +16,7 @@
 <%def name="render_docstring(ctx, unit)">
     <% pd = ctx.get_parsed_docstring(unit) %>
     % if pd.description:
-        ${render_paragraph(ctx, pd.description)}
+        ${render_markup(ctx, pd.description)}
     %endif
 
     % if unit.role == "function":
@@ -39,7 +39,7 @@
     % if pd.subsections:
     % for (name, text) in pd.subsections:
     <h3>${name}</h3>
-    ${render_paragraph(ctx, text)}
+    ${render_markup(ctx, text)}
     % endfor
     % endif
 </%def>
@@ -66,11 +66,11 @@
         ${item.type_name}
     %endif
     % if item.description:
-        <br/>${render_paragraph(ctx, item.description)}
+        <br/>${render_markup(ctx, item.description)}
     %endif
     </li>
 </%def>
 
-<%def name="render_paragraph(ctx, text)">
-    ${ctx.render_paragraph(text) | n}
+<%def name="render_markup(ctx, text)">
+    ${ctx.render_markup(text) | n}
 </%def>
