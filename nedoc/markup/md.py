@@ -20,10 +20,9 @@ class NedocRenderer(marko.HTMLRenderer):
         self.unit = unit
 
     def render_link(self, element: Link) -> str:
-        if not is_intradoc_link(element):
+        link = get_intradoc_link(element)
+        if link is None:
             return super().render_link(element)
-
-        link = element.dest.strip()
 
         if link == ".":
             if isinstance(self.unit, Module):
@@ -79,15 +78,19 @@ class NedocRenderer(marko.HTMLRenderer):
 INTRADOC_LINK_REGEX = re.compile(r"\.*(?:[a-zA-z\d_]+\.?)*[a-zA-z\d_]+")
 
 
-def is_intradoc_link(element: Link) -> bool:
-    # The name must be wrapped in backticks (`Link`)
-    if not (len(element.children) > 0 and isinstance(element.children[0], CodeSpan)):
-        return False
-    # The link can only consist of alphanumerical text and dots
+def get_intradoc_link(element: Link) -> Optional[str]:
+    # The link must be wrapped in backticks [Link](`path`)
     link = element.dest.strip()
+    if len(link) < 2:
+        return None
+    if not (link.startswith("`") and link.endswith("`")):
+        return None
+
+    link = link[1:-1]
+    # The link can only consist of alphanumerical text and dots
     if link != "." and not INTRADOC_LINK_REGEX.fullmatch(link):
-        return False
-    return True
+        return None
+    return link
 
 
 def convert_markdown_to_html(

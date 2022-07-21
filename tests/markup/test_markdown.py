@@ -59,7 +59,7 @@ def test_markdown_link_absolute(tmp_path):
         '''
 class Foo:
     """
-    [`Bar`](a.bar.Bar)
+    [Bar](`a.bar.Bar`)
     """
 ''',
     )
@@ -72,7 +72,7 @@ class Bar:
     )
     result = pb.build()
     x = result.markdown("a.foo.Foo")
-    assert x == '<p><a href="a.bar.Bar.html"><code>Bar</code></a></p>\n'
+    assert x == '<p><a href="a.bar.Bar.html">Bar</a></p>\n'
 
 
 def test_markdown_link_relative_no_prefix(tmp_path):
@@ -82,7 +82,7 @@ def test_markdown_link_relative_no_prefix(tmp_path):
         '''
 class Foo:
     """
-    [`Bar`](Bar)
+    [Bar](`Bar`)
     """
 
 class Bar:
@@ -91,7 +91,7 @@ class Bar:
     )
     result = pb.build()
     x = result.markdown("a.foo.Foo")
-    assert x == '<p><a href="a.foo.Bar.html"><code>Bar</code></a></p>\n'
+    assert x == '<p><a href="a.foo.Bar.html">Bar</a></p>\n'
 
 
 def test_markdown_link_relative_single_dot_prefix(tmp_path):
@@ -101,7 +101,7 @@ def test_markdown_link_relative_single_dot_prefix(tmp_path):
         '''
 class Foo:
     """
-    [`Bar`](.Bar)
+    [Bar](`.Bar`)
     """
 
 class Bar:
@@ -110,7 +110,7 @@ class Bar:
     )
     result = pb.build()
     x = result.markdown("a.foo.Foo")
-    assert x == '<p><a href="a.foo.Bar.html"><code>Bar</code></a></p>\n'
+    assert x == '<p><a href="a.foo.Bar.html">Bar</a></p>\n'
 
 
 def test_markdown_link_relative_parent_path(tmp_path):
@@ -120,7 +120,7 @@ def test_markdown_link_relative_parent_path(tmp_path):
         '''
 class Foo:
     """
-    [`Bar`](...Bar)
+    [Bar](`...Bar`)
     """
 ''',
     )
@@ -133,7 +133,7 @@ class Bar:
     )
     result = pb.build()
     x = result.markdown("a.b.foo.Foo")
-    assert x == '<p><a href="a.Bar.html"><code>Bar</code></a></p>\n'
+    assert x == '<p><a href="a.Bar.html">Bar</a></p>\n'
 
 
 def test_markdown_link_relative_parent_path_child_module(tmp_path):
@@ -143,7 +143,7 @@ def test_markdown_link_relative_parent_path_child_module(tmp_path):
         '''
 class Foo:
     """
-    [`Bar`](...bar.Bar)
+    [Bar](`...bar.Bar`)
     """
 ''',
     )
@@ -156,7 +156,7 @@ class Bar:
     )
     result = pb.build()
     x = result.markdown("a.b.foo.Foo")
-    assert x == '<p><a href="a.bar.Bar.html"><code>Bar</code></a></p>\n'
+    assert x == '<p><a href="a.bar.Bar.html">Bar</a></p>\n'
 
 
 def test_markdown_link_module(tmp_path):
@@ -166,13 +166,13 @@ def test_markdown_link_module(tmp_path):
         '''
 class Foo:
     """
-    [`bar`](a.foo)
+    [bar](`a.foo`)
     """
 ''',
     )
     result = pb.build()
     x = result.markdown("a.foo.Foo")
-    assert x == '<p><a href="a.foo.html"><code>bar</code></a></p>\n'
+    assert x == '<p><a href="a.foo.html">bar</a></p>\n'
 
 
 def test_markdown_link_current_module(tmp_path):
@@ -182,13 +182,13 @@ def test_markdown_link_current_module(tmp_path):
         '''
 class Foo:
     """
-    [`bar`](.)
+    [bar](`.`)
     """
 ''',
     )
     result = pb.build()
     x = result.markdown("a.foo.Foo")
-    assert x == '<p><a href="a.foo.html"><code>bar</code></a></p>\n'
+    assert x == '<p><a href="a.foo.html">bar</a></p>\n'
 
 
 def test_markdown_link_current_module_in_module(tmp_path):
@@ -197,13 +197,13 @@ def test_markdown_link_current_module_in_module(tmp_path):
         "a/foo.py",
         '''
 """
-[`bar`](.)
+[bar](`.`)
 """
 ''',
     )
     result = pb.build()
     x = result.markdown("a.foo")
-    assert x == '<p><a href="a.foo.html"><code>bar</code></a></p>\n'
+    assert x == '<p><a href="a.foo.html">bar</a></p>\n'
 
 
 def test_markdown_link_class(tmp_path):
@@ -213,7 +213,7 @@ def test_markdown_link_class(tmp_path):
         '''
 class Foo:
     """
-    [`Bar`](a.foo.Bar)
+    [Bar](`a.foo.Bar`)
     """
 
 class Bar:
@@ -222,7 +222,7 @@ class Bar:
     )
     result = pb.build()
     x = result.markdown("a.foo.Foo")
-    assert x == '<p><a href="a.foo.Bar.html"><code>Bar</code></a></p>\n'
+    assert x == '<p><a href="a.foo.Bar.html">Bar</a></p>\n'
 
 
 def test_markdown_link_function(tmp_path):
@@ -232,7 +232,7 @@ def test_markdown_link_function(tmp_path):
         '''
 class Foo:
     """
-    [`bar`](a.foo.bar)
+    [bar](`a.foo.bar`)
     """
 
     def fn(self):
@@ -245,7 +245,7 @@ def bar():
     )
     result = pb.build()
     x = result.markdown("a.foo.Foo")
-    assert x == '<p><a href="a.foo.html#f_bar"><code>bar</code></a></p>\n'
+    assert x == '<p><a href="a.foo.html#f_bar">bar</a></p>\n'
 
 
 def test_markdown_link_method(tmp_path):
@@ -255,7 +255,7 @@ def test_markdown_link_method(tmp_path):
         '''
 class Foo:
     """
-    [`bar`](a.foo.Bar.fn)
+    [bar](`a.foo.Bar.fn`)
     """
 
 
@@ -266,7 +266,7 @@ class Bar:
     )
     result = pb.build()
     x = result.markdown("a.foo.Foo")
-    assert x == '<p><a href="a.foo.Bar.html#f_fn"><code>bar</code></a></p>\n'
+    assert x == '<p><a href="a.foo.Bar.html#f_fn">bar</a></p>\n'
 
 
 def test_markdown_link_self_method(tmp_path):
@@ -276,7 +276,7 @@ def test_markdown_link_self_method(tmp_path):
         '''
 class Foo:
     """
-    [`bar`](fn)
+    [bar](`fn`)
     """
 
     def fn(self):
@@ -285,7 +285,7 @@ class Foo:
     )
     result = pb.build()
     x = result.markdown("a.foo.Foo")
-    assert x == '<p><a href="a.foo.Foo.html#f_fn"><code>bar</code></a></p>\n'
+    assert x == '<p><a href="a.foo.Foo.html#f_fn">bar</a></p>\n'
 
 
 def test_markdown_link_prefer_local_over_module_without_dot(tmp_path):
@@ -295,7 +295,7 @@ def test_markdown_link_prefer_local_over_module_without_dot(tmp_path):
         '''
 class Foo:
     """
-    [`bar`](Bar)
+    [bar](`Bar`)
     """
 
     def Bar(self):
@@ -308,7 +308,7 @@ class Bar:
     )
     result = pb.build()
     x = result.markdown("a.foo.Foo")
-    assert x == '<p><a href="a.foo.Foo.html#f_Bar"><code>bar</code></a></p>\n'
+    assert x == '<p><a href="a.foo.Foo.html#f_Bar">bar</a></p>\n'
 
 
 def test_markdown_link_prefer_module_over_local_with_dot(tmp_path):
@@ -318,7 +318,7 @@ def test_markdown_link_prefer_module_over_local_with_dot(tmp_path):
         '''
 class Foo:
     """
-    [`bar`](.Bar)
+    [bar](`.Bar`)
     """
 
     def Bar(self):
@@ -331,4 +331,4 @@ class Bar:
     )
     result = pb.build()
     x = result.markdown("a.foo.Foo")
-    assert x == '<p><a href="a.foo.Bar.html"><code>bar</code></a></p>\n'
+    assert x == '<p><a href="a.foo.Bar.html">bar</a></p>\n'
