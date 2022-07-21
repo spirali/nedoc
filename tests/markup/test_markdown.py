@@ -346,4 +346,4 @@ def test_markdown_link_missing_parent(tmp_path):
     )
     result = pb.build()
     x = result.markdown("a.foo")
-    assert x == '<p><a href="a.foo.Bar.html">bar</a></p>\n'
+    assert x == '<p><a href="%60...Bar%60">bar</a></p>\n'
