@@ -332,3 +332,18 @@ class Bar:
     result = pb.build()
     x = result.markdown("a.foo.Foo")
     assert x == '<p><a href="a.foo.Bar.html">bar</a></p>\n'
+
+
+def test_markdown_link_missing_parent(tmp_path):
+    pb = ProjectBuilder(tmp_path)
+    pb.file(
+        "a/foo.py",
+        '''
+"""
+[bar](`...Bar`)
+"""
+''',
+    )
+    result = pb.build()
+    x = result.markdown("a.foo")
+    assert x == '<p><a href="a.foo.Bar.html">bar</a></p>\n'
