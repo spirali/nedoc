@@ -3,6 +3,8 @@ import pytest
 from nedoc.config import DocstringStyle
 from nedoc.docstring import merge_first_line, parse_docstring
 
+from .utils.project_builder import render_docstring
+
 
 def test_merge_first_list():
     assert merge_first_line("test1") == "test1"
@@ -70,3 +72,21 @@ y: float"""
         assert ds.params[0].arg_name == "x"
         assert ds.params[0].type_name == "int"
         assert ds.params[1].arg_name == "y"
+
+
+def test_parse_do_not_copy_arguments_from_init_docstring(tmp_path, snapshot):
+    rendered = render_docstring(
+        tmp_path,
+        '''
+class target:
+    def __init__(self, a: int, b: int):
+        """
+        This is a class.
+
+        :param a: first argument
+        :param b: second argument
+        """
+''',
+        copy_init_docstring=True,
+    )
+    snapshot.assert_match(rendered, "expected.html")

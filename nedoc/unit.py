@@ -51,7 +51,7 @@ class Unit:
             child
             for child in self.childs
             if (cls is None or isinstance(child, cls))
-               and (public is None or public == is_public_name(child.name))
+            and (public is None or public == is_public_name(child.name))
         ]
 
     def functions(self, public=None):
@@ -136,7 +136,7 @@ class Module(Unit):
             unit = gctx.find_by_cname(v)
             if unit is not None:
                 if (cls is None or isinstance(unit, cls)) and (
-                        public is None or public == is_public_name(unit.name)
+                    public is None or public == is_public_name(unit.name)
                 ):
                     result.append(UnitChild(k, unit, True))
         result.sort(key=lambda c: (c.unit.sort_order, c.name))
@@ -223,8 +223,16 @@ class Function(Unit):
     keyword = "def"
     role = "function"
 
-    def __init__(self, name: str, lineno: int, args: List[Argument], kwonlyargs: List[Argument],
-                 vararg, kwarg, returns):
+    def __init__(
+        self,
+        name: str,
+        lineno: int,
+        args: List[Argument],
+        kwonlyargs: List[Argument],
+        vararg,
+        kwarg,
+        returns,
+    ):
         super().__init__(name, lineno)
         self.args = args
         self.kwonlyargs = kwonlyargs
