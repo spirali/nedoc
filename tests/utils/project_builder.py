@@ -87,9 +87,17 @@ def parse_unit_inner(
 
 def render_docstring(tmpdir: Path, code: str, name="target", **config_args) -> str:
     built, unit = parse_unit_inner(tmpdir, code, name=name, **config_args)
+    return render_template(built, unit, "docstring.mako", "render_docstring")
 
+
+def render_docline(tmpdir: Path, code: str, name="target", **config_args) -> str:
+    built, unit = parse_unit_inner(tmpdir, code, name=name, **config_args)
+    return render_template(built, unit, "docstring.mako", "render_docline")
+
+
+def render_template(built: BuiltProject, unit: Unit, template: str, template_def: str):
     renderer = Renderer(built.core.gctx)
-    template = renderer.lookup.get_template("docstring.mako")
+    template = renderer.lookup.get_template(template)
 
     render_ctx = RenderContext(unit, built.core.gctx)
-    return template.get_def("render_docstring").render(render_ctx, unit)
+    return template.get_def(template_def).render(render_ctx, unit)

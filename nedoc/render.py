@@ -58,7 +58,7 @@ class RenderContext:
         lexer = lexers.get_lexer_by_name("python")
         return highlight(code, lexer, formatter)
 
-    def render_paragraph(self, text):
+    def render_markup(self, text):
         if self.gctx.config.markup == Markup.RST:
             content = convert_rst_to_html(text)
             return "<div class='rst-doc'>{}</div>".format(content)
@@ -73,30 +73,26 @@ class RenderContext:
 
     def get_parsed_docstring(self, unit: Unit) -> ParsedDocString:
         docstring = parse_docstring(self.gctx.config.style, unit.docstring)
-        docstring = enrich_docstring_with_type_hints(docstring, unit)
-        docstring = self.render_markup_in_docstring(docstring)
+        return self.enrich_docstring(docstring)
+
+    def enrich_docstring(self, docstring: ParsedDocString) -> ParsedDocString:
+        """
+        Tries to add additional information to the docstring.
+
+        Adds types to parameters from type hints.
+        Renders markup in parameters description.
+        """
+        if isinstance(self.unit, Function):
+            if docstring.params is not None:
+                args = {arg.name: arg for arg in self.unit.named_args}
+                for param in docstring.params:
+                    if param.description is not None:
+                        param.description = self.render_markup(param.description)
+                    arg = args.get(param.arg_name)
+                    if arg is not None:
+                        if param.type_name is None and arg.annotation is not None:
+                            param.type_name = arg.annotation
         return docstring
-
-    def render_markup_in_docstring(self, docstring: ParsedDocString) -> ParsedDocString:
-        if docstring.params is not None:
-            for param in docstring.params:
-                if param.description is not None:
-                    param.description = self.render_paragraph(param.description)
-        return docstring
-
-
-def enrich_docstring_with_type_hints(
-    docstring: ParsedDocString, unit: Unit
-) -> ParsedDocString:
-    if isinstance(unit, Function):
-        args = {arg.name: arg for arg in unit.named_args}
-        if docstring.params is not None:
-            for param in docstring.params:
-                arg = args.get(param.arg_name)
-                if arg is not None:
-                    if param.type_name is None and arg.annotation is not None:
-                        param.type_name = arg.annotation
-    return docstring
 
 
 TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates")
