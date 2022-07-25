@@ -3,7 +3,7 @@ import pytest
 from nedoc.config import DocstringStyle
 from nedoc.docstring import merge_first_line, parse_docstring
 
-from .utils.project_builder import render_docstring
+from .utils.project_builder import parse_unit_with_ctx, render_docstring
 
 
 def test_merge_first_list():
@@ -90,3 +90,39 @@ class target:
         copy_init_docstring=True,
     )
     snapshot.assert_match(rendered, "expected.html")
+
+
+def test_parse_docstring_parameters(tmp_path, snapshot):
+    ctx, unit = parse_unit_with_ctx(
+        tmp_path,
+        '''
+def target(self, a: int, b: int):
+    """
+    Some documentation.
+
+    :param a: first argument
+    :param b: second argument
+    """
+''',
+    )
+    docstring = ctx.parsed_docstring(unit)
+    assert len(docstring.params) == 2
+    assert docstring.params[0].arg_name == "a"
+    assert docstring.params[1].arg_name == "b"
+
+
+def test_parse_docstring_parameters_no_docline(tmp_path, snapshot):
+    ctx, unit = parse_unit_with_ctx(
+        tmp_path,
+        '''
+def target(self, a: int, b: int):
+    """
+    :param a: first argument
+    :param b: second argument
+    """
+''',
+    )
+    docstring = ctx.parsed_docstring(unit)
+    assert len(docstring.params) == 2
+    assert docstring.params[0].arg_name == "a"
+    assert docstring.params[1].arg_name == "b"

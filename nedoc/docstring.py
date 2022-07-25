@@ -61,6 +61,7 @@ def parse_docstring(
     if docstring is None:
         return ParsedDocString(None, None)
 
+    orig_docstring = docstring
     docstring = merge_first_line(docstring.strip())
 
     ds_style = STYLE_MAP.get(style)
@@ -74,14 +75,14 @@ def parse_docstring(
             description = description.lstrip()
         return ParsedDocString(docline, description)
 
-    dstr = docstring_parser.parse(docstring, ds_style)
+    dstr = docstring_parser.parse(orig_docstring, ds_style)
     subsections = [
         (m.args[0].replace("_", " ").capitalize(), m.description)
         for m in dstr.meta
         if len(m.args) == 1 and m.args[0] not in ("param", "returns", "raises")
     ]
     return ParsedDocString(
-        dstr.short_description,
+        docstring.split("\n", 1)[0],
         dstr.long_description,
         dstr.params,
         dstr.returns,

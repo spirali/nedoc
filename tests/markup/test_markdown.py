@@ -1,4 +1,5 @@
 from nedoc.config import DocstringStyle, Markup
+
 from ..utils.project_builder import ProjectBuilder, render_docline, render_docstring
 
 
@@ -346,7 +347,9 @@ def test_markdown_link_missing_parent(tmp_path):
 
 
 def test_markdown_in_argument_docstring(tmp_path, snapshot):
-    rendered = render_docstring(tmp_path, '''
+    rendered = render_docstring(
+        tmp_path,
+        '''
 def target(a: int):
     """
     Documentation.
@@ -356,12 +359,17 @@ def target(a: int):
 
 def bar():
     pass
-''', style=DocstringStyle.RST, markup=Markup.MARKDOWN)
+''',
+        style=DocstringStyle.RST,
+        markup=Markup.MARKDOWN,
+    )
     snapshot.assert_match(rendered, "expected.html")
 
 
 def test_markdown_in_docline(tmp_path, snapshot):
-    rendered = render_docline(tmp_path, '''
+    rendered = render_docline(
+        tmp_path,
+        '''
 def target(a: int):
     """
     Documentation with **bold text** and a [link](`.bar`).
@@ -369,7 +377,9 @@ def target(a: int):
 
 def bar():
     pass
-''', markup=Markup.MARKDOWN)
+''',
+        markup=Markup.MARKDOWN,
+    )
     snapshot.assert_match(rendered, "expected.html")
 
 
