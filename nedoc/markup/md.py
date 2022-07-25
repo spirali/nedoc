@@ -52,7 +52,7 @@ class NedocRenderer(marko.HTMLRenderer):
             link = link[1:]
 
         # Try to resolve the link in the same module
-        parent: Unit = self.unit.parent
+        parent: Unit = self.unit.module()
         if parent is not None:
             item = parent.local_find(link)
             if item is not None:
