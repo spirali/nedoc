@@ -216,6 +216,6 @@ h1 {
   }
 }
 
-.rst-doc p {
+.rst-doc p, .md-doc p {
   margin: 0.5em 0;
 }
