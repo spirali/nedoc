@@ -1,5 +1,4 @@
-from setuptools import setup
-import glob
+from setuptools import find_packages, setup
 
 
 with open("requirements.txt") as reqs:
@@ -14,8 +13,6 @@ if VERSION is None:
 long_desc = """
 See https://github.com/spirali/nedoc for more details."""
 
-assets = glob.glob("nedoc/templates/assets/**/*", recursive=True)
-
 setup(
     name="nedoc",
     version=VERSION,
@@ -25,7 +22,7 @@ setup(
     author="Stanislav Bohm",
     author_email="spirali@kreatrix.org",
     license="MIT",
-    packages=["nedoc"],
+    packages=find_packages(),
     provides=["nedoc"],
     package_data={"nedoc": ["nedoc/templates/*"]},
     include_package_data=True,
