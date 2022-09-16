@@ -1,5 +1,5 @@
 asttokens==2.0.5
-mako==1.1.6
+mako==1.2.2
 tqdm>=4.62,<5
 htmlmin==0.1.12
 pygments>=2.11,<3
