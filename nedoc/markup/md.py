@@ -70,8 +70,10 @@ class NedocRenderer(marko.HTMLRenderer):
                 if item is not None:
                     return self.render_intradoc_link(target=item, element=element)
 
-        logging.warning(f"Intradoc link `{original_link}` in {render_cname(self.unit.cname)} "
-                        "could not be resolved")
+        logging.warning(
+            f"Intradoc link `{original_link}` in {render_cname(self.unit.cname)} "
+            "could not be resolved"
+        )
 
         return super().render_link(element)
 
@@ -102,7 +104,7 @@ def get_intradoc_link(element: Link) -> Optional[str]:
 
 
 def convert_markdown_to_html(
-        ctx: GlobalContext, unit: Unit, text: Optional[str]
+    ctx: GlobalContext, unit: Unit, text: Optional[str]
 ) -> str:
     if text is None:
         return ""

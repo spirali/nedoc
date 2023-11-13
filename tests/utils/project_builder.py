@@ -3,6 +3,7 @@ from typing import Tuple
 
 from nedoc.config import DocstringStyle, Markup, create_config_file, parse_config
 from nedoc.core import Core, GlobalContext
+from nedoc.docstring import ParsedDocString
 from nedoc.markup.md import convert_markdown_to_html
 from nedoc.render import RenderContext, Renderer
 from nedoc.unit import Unit
@@ -14,6 +15,7 @@ class ProjectBuilder:
 
     It puts all files within a `src` directory and then points nedoc to it.
     """
+
     def __init__(self, path: Path, name="project"):
         self.name = name
         self.root_dir = path.joinpath(name)
@@ -79,13 +81,24 @@ class BuiltProject:
         unit = self.get(path)
         return render_markdown(self.core.gctx, unit)
 
+    def parsed_docstring(self, unit: Unit) -> ParsedDocString:
+        """
+        Gets the parsed docstring of the given unit.
+        """
+        render_ctx = RenderContext(unit, self.core.gctx)
+        return render_ctx.get_parsed_docstring(unit)
 
-def parse_unit(tmpdir: Path, code: str, name="target", file_name="foo", **config_args) -> Unit:
-    return parse_unit_inner(tmpdir, code, name, file_name=file_name, **config_args)[1]
+
+def parse_unit(
+    tmpdir: Path, code: str, name="target", file_name="foo", **config_args
+) -> Unit:
+    return parse_unit_with_ctx(tmpdir, code, name, file_name=file_name, **config_args)[
+        1
+    ]
 
 
-def parse_unit_inner(
-    tmpdir: Path, code: str, name: str, file_name="foo", **config_args
+def parse_unit_with_ctx(
+    tmpdir: Path, code: str, name="target", file_name="foo", **config_args
 ) -> Tuple[BuiltProject, Unit]:
     pb = ProjectBuilder(tmpdir)
     pb.file(f"{file_name}.py", code)
@@ -100,12 +113,12 @@ def render_markdown(gctx: GlobalContext, unit: Unit) -> str:
 
 
 def render_docstring(tmpdir: Path, code: str, name="target", **config_args) -> str:
-    built, unit = parse_unit_inner(tmpdir, code, name=name, **config_args)
+    built, unit = parse_unit_with_ctx(tmpdir, code, name=name, **config_args)
     return render_template(built, unit, "docstring.mako", "render_docstring")
 
 
 def render_docline(tmpdir: Path, code: str, name="target", **config_args) -> str:
-    built, unit = parse_unit_inner(tmpdir, code, name=name, **config_args)
+    built, unit = parse_unit_with_ctx(tmpdir, code, name=name, **config_args)
     return render_template(built, unit, "docstring.mako", "render_docline")
 
 
